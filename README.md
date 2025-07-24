@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+ 
 # order-manager-frontend
 =======
 # React + Vite
