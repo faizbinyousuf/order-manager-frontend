@@ -1,10 +1,11 @@
-import "./App.css";
+import { Button } from "@/components/ui/button";
+import { CustomerSection } from "./CustomerSection";
 
 function App() {
   return (
-    <>
-      <p></p>
-    </>
+    <div>
+      <CustomerSection></CustomerSection>
+    </div>
   );
 }
 
