@@ -80,7 +80,7 @@ function CustomerDetails() {
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center gap-4 ">
+          <div className="flex items-center justify-center    gap-4 ">
             <div className="flex-1">
               <Label className="mb-2" htmlFor="customer">
                 Select Customer
@@ -92,7 +92,7 @@ function CustomerDetails() {
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between"
+                    className="w-full justify-between "
                   >
                     {value
                       ? frameworks.find(
@@ -136,9 +136,10 @@ function CustomerDetails() {
                 </PopoverContent>
               </Popover>
             </div>
+
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="mt-6 bg-transparent">
+                <Button variant="outline" className="mt-5 bg-transparent">
                   <Plus className="h-4 w-4 mr-2" />
                   Add New
                 </Button>
