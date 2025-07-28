@@ -17,7 +17,7 @@ import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 function ItemConfiguration() {
   return (
-    <>
+    <div>
       <Card className="border border-gray-200 shadow-sm">
         <CardHeader className="border-b border-gray-100 bg-white">
           <CardTitle className="flex items-center gap-3">
@@ -26,7 +26,7 @@ function ItemConfiguration() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="w-full ">
+          <div className="w-full space-y-3">
             <div className="grid md:grid-cols-2 gap-6  ">
               <div>
                 <Label
@@ -76,38 +76,38 @@ function ItemConfiguration() {
                   </SelectContent>
                 </Select>
               </div>
-              <div className="col-span-2">
-                <Label
-                  className="mb-1 text-sm font-medium text-gray-700"
-                  htmlFor="inscription"
-                >
-                  Inscription
-                </Label>
-                <Textarea
-                  id="inscription"
-                  // value={orderData.inscription}
-                  // onChange={(e) =>
-                  //   setOrderData({ ...orderData, inscription: e.target.value })
-                  // }
-                  placeholder="Enter text to be written on the item"
-                  rows={3}
-                  className="border-gray-300 focus:border-rose-500 focus:ring-rose-500"
-                />
-              </div>
-              <div className="col-span-2">
-                <Label
-                  className=" mb-1 text-sm font-medium text-gray-700"
-                  htmlFor="price"
-                >
-                  Base Price
-                </Label>
-                <Input readOnly defaultValue="50.0"></Input>
-              </div>
+            </div>
+            <div>
+              <Label
+                className="mb-1 text-sm font-medium text-gray-700"
+                htmlFor="inscription"
+              >
+                Inscription
+              </Label>
+              <Textarea
+                id="inscription"
+                // value={orderData.inscription}
+                // onChange={(e) =>
+                //   setOrderData({ ...orderData, inscription: e.target.value })
+                // }
+                placeholder="Enter text to be written on the item"
+                rows={3}
+                className="border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+              />
+            </div>
+            <div className="col-span-2">
+              <Label
+                className=" mb-1 text-sm font-medium text-gray-700"
+                htmlFor="price"
+              >
+                Base Price
+              </Label>
+              <Input readOnly defaultValue="50.0"></Input>
             </div>
           </div>
         </CardContent>
       </Card>
-    </>
+    </div>
   );
 }
 

@@ -71,28 +71,34 @@ function CustomerDetails() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState("");
   return (
-    <div>
-      <Card className="border border-gray-200 shadow-sm">
+    <div className="w-full">
+      {" "}
+      {/* Ensure full width */}
+      <Card className="border border-gray-200 shadow-sm w-full">
         <CardHeader className="border-b border-gray-100 bg-white">
           <CardTitle className="flex items-center gap-3">
             <User className="h-5 w-5" />
             Customer Details
           </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-center    gap-4 ">
-            <div className="flex-1">
-              <Label className="mb-2" htmlFor="customer">
+        <CardContent className="space-y-4 p-4 sm:p-6">
+          {" "}
+          {/* Add responsive padding */}
+          {/* Changed to responsive flex layout */}
+          <div className="flex flex-col sm:flex-row sm:items-end gap-4 w-full">
+            <div className="flex-1 w-full min-w-0 text-left">
+              {" "}
+              {/* min-w-0 prevents flex item from overflowing */}
+              <Label className="block mb-2" htmlFor="customer">
                 Select Customer
               </Label>
-
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-full justify-between "
+                    className="w-full justify-between"
                   >
                     {value
                       ? frameworks.find(
@@ -139,12 +145,17 @@ function CustomerDetails() {
 
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="outline" className="mt-5 bg-transparent">
+                <Button
+                  variant="outline"
+                  className="bg-transparent w-full sm:w-auto sm:mt-0"
+                >
                   <Plus className="h-4 w-4 mr-2" />
                   Add New
                 </Button>
               </DialogTrigger>
-              <DialogContent>
+              <DialogContent className="w-[95vw] max-w-md">
+                {" "}
+                {/* Make dialog responsive */}
                 <DialogHeader>
                   <DialogTitle>Add New Customer</DialogTitle>
                 </DialogHeader>
