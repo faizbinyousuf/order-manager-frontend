@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Truck } from "lucide-react";
 import { Label } from "../ui/label";
@@ -11,9 +12,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Input } from "../ui/input";
+
 import { Textarea } from "../ui/textarea";
 function DeliveryAddress() {
+  const [date, setDate] = React.useState<Date | undefined>(new Date());
+  const [time, setTime] = React.useState<Date | undefined>(new Date());
+  const [openDate, setOpenDate] = React.useState(false);
+  const [openTime, setOpenTime] = React.useState(false);
+
   return (
     <>
       <Card className="border border-gray-200 shadow-sm">
@@ -28,14 +34,14 @@ function DeliveryAddress() {
             <div className="grid text-left  gap-2">
               <Label htmlFor="date">Delivery Date</Label>
               <div>
-                <Popover>
+                <Popover open={openDate} onOpenChange={setOpenDate}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       id="date"
                       className="w-full rounded-sm justify-between font-normal"
                     >
-                      {/* {date ? date.toLocaleDateString() : "Select date"} */}
+                      {date ? date.toLocaleDateString() : "Select date"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -45,11 +51,12 @@ function DeliveryAddress() {
                   >
                     <Calendar
                       mode="single"
-                      // selected={date}
+                      selected={date}
                       captionLayout="dropdown"
                       onSelect={(date) => {
-                        //   setDate(date)
-                        //   setOpen(false)
+                        console.log("two");
+                        setDate(date);
+                        setOpenDate(false);
                       }}
                     />
                   </PopoverContent>
@@ -59,14 +66,14 @@ function DeliveryAddress() {
             <div className="grid text-left  gap-2">
               <Label htmlFor="time">Delivery Time</Label>
               <div>
-                <Popover>
+                <Popover open={openTime} onOpenChange={setOpenTime}>
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
                       id="time"
                       className="w-full rounded-sm justify-between font-normal"
                     >
-                      {/* {date ? date.toLocaleDateString() : "Select date"} */}
+                      {time ? time.toLocaleDateString() : "Select time"}
                       <ChevronDownIcon />
                     </Button>
                   </PopoverTrigger>
@@ -76,12 +83,15 @@ function DeliveryAddress() {
                   >
                     <Calendar
                       mode="single"
-                      // selected={date}
+                      selected={time}
                       captionLayout="dropdown"
-                      onSelect={(date) => {
-                        //   setDate(date)
-                        //   setOpen(false)
+                      onSelect={(time) => {
+                        console.log("onSelect", time);
+                        setTime(time);
+                        setOpenTime(false);
                       }}
+                      title="Select a time"
+                      animate={true}
                     />
                   </PopoverContent>
                 </Popover>

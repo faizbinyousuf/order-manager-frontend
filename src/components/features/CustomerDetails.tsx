@@ -52,18 +52,24 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "../ui/input";
 
-const frameworks = [
+const customers = [
   {
-    value: "next.js",
-    label: "Next.js",
+    id: "1",
+    name: "John Smith",
+    phone: "+1234567890",
+    email: "john@example.com",
   },
   {
-    value: "sveltekit",
-    label: "SvelteKit",
+    id: "2",
+    name: "Sarah Johnson",
+    phone: "+1234567891",
+    email: "sarah@example.com",
   },
   {
-    value: "nuxt.js",
-    label: "Nuxt.js",
+    id: "3",
+    name: "Mike Davis",
+    phone: "+1234567892",
+    email: "mike@example.com",
   },
 ];
 
@@ -101,23 +107,22 @@ function CustomerDetails() {
                     className="w-full justify-between"
                   >
                     {value
-                      ? frameworks.find(
-                          (framework) => framework.value === value
-                        )?.label
-                      : "Select framework..."}
+                      ? customers.find((customer) => customer.name === value)
+                          ?.name
+                      : "Select customer..."}
                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0">
                   <Command>
-                    <CommandInput placeholder="Search framework..." />
+                    <CommandInput placeholder="Search customers..." />
                     <CommandList>
-                      <CommandEmpty>No framework found.</CommandEmpty>
+                      <CommandEmpty>No customer found.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {customers.map((customer) => (
                           <CommandItem
-                            key={framework.value}
-                            value={framework.value}
+                            key={customer.id}
+                            value={customer.name}
                             onSelect={(currentValue) => {
                               setValue(
                                 currentValue === value ? "" : currentValue
@@ -128,12 +133,12 @@ function CustomerDetails() {
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                value === framework.value
+                                value === customer.name
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
                             />
-                            {framework.label}
+                            {customer.name}
                           </CommandItem>
                         ))}
                       </CommandGroup>
