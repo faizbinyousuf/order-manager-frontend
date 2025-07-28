@@ -1,6 +1,9 @@
 import CustomerDetails from "@/components/features/CustomerDetails";
+import DeliveryAddress from "@/components/features/DeliveryAddress";
 import DesignSelection from "@/components/features/DesignSelection";
 import ItemConfiguration from "@/components/features/ItemConfiguration";
+import PaymentDetails from "@/components/features/PaymentDetails";
+import PhotoPrint from "@/components/features/PhotoPrint";
 
 function HomePage() {
   return (
@@ -10,6 +13,9 @@ function HomePage() {
           <CustomerDetails />
           <ItemConfiguration />
           <DesignSelection />
+          <PhotoPrint />
+          <PaymentDetails />
+          <DeliveryAddress />
         </div>
       </div>
     </div>
