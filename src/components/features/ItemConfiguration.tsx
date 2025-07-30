@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Cake, Palette, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 import { Label } from "@/components/ui/label";
 
 import {
@@ -15,14 +13,21 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
+
+import { useAppSelector, useAppDispatch } from "@/app/hooks";
 function ItemConfiguration() {
+  const dispatch = useAppDispatch();
+  const cakes = useAppSelector((state) => state.order.cakes);
+  const shapes = useAppSelector((state) => state.order.shapes);
+  const selectedCake = useAppSelector((state) => state.order.selectedCake);
+
   return (
     <div>
       <Card className="border border-gray-200 shadow-sm">
         <CardHeader className="border-b border-gray-100 bg-white">
           <CardTitle className="flex items-center gap-3">
             <Settings />
-            <h3>Item Configuration</h3>
+            <h3>Item Configuration </h3>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -42,11 +47,11 @@ function ItemConfiguration() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Flavour</SelectLabel>
-                      <SelectItem value="apple">Apple</SelectItem>
-                      <SelectItem value="banana">Banana</SelectItem>
-                      <SelectItem value="blueberry">Blueberry</SelectItem>
-                      <SelectItem value="grapes">Grapes</SelectItem>
-                      <SelectItem value="pineapple">Pineapple</SelectItem>
+                      {cakes.map((cake) => (
+                        <SelectItem key={cake.id} value={cake.name}>
+                          {cake.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -66,12 +71,12 @@ function ItemConfiguration() {
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>Shape</SelectLabel>
-                      <SelectItem value="square">Square</SelectItem>
-                      <SelectItem value="rectangle">Rectangle</SelectItem>
-                      <SelectItem value="circle">Circle</SelectItem>
-                      <SelectItem value="round">Round</SelectItem>
-                      <SelectItem value="star   ">Star</SelectItem>
-                      <SelectItem value="custom">Custom</SelectItem>
+
+                      {shapes.map((shape) => (
+                        <SelectItem key={shape.id} value={shape.name}>
+                          {shape.name}
+                        </SelectItem>
+                      ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
@@ -102,7 +107,9 @@ function ItemConfiguration() {
               >
                 Base Price
               </Label>
-              <Input readOnly defaultValue="50.0"></Input>
+              <Input readOnly defaultValue="0">
+                {selectedCake?.price}
+              </Input>
             </div>
           </div>
         </CardContent>
