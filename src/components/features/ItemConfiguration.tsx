@@ -15,8 +15,6 @@ import {
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 
-import { useState } from "react";
-
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import DesignSelection from "./DesignSelection";
 import PhotoPrint from "./PhotoPrint";
@@ -25,8 +23,6 @@ import { Button } from "../ui/button";
 import type { Cake } from "@/types/OrderTypes";
 import { addSelectedCake, removeCakeSelection, updateCake } from "./orderSlice";
 function ItemConfiguration() {
-  const [flavor, setFlavor] = useState("");
-  const [shape, setShape] = useState("");
   const dispatch = useAppDispatch();
   const cakes = useAppSelector((state) => state.order.cakes);
   const shapes = useAppSelector((state) => state.order.shapes);
@@ -54,22 +50,16 @@ function ItemConfiguration() {
   };
 
   const removeCake = (id: number) => {
-    // dispatch(removeCakeSelection(id));
+    dispatch(removeCakeSelection(id));
   };
   const handleFlavorSelection = (index: number, id: string) => {
     console.log(" id", id);
-    // setFlavor(flavor);
-    //TODO
-    // updateCakeProperty(index, { flavorId: parseInt(id) });
+
     updateCakeProperty(index, {
       flavorId: parseInt(id),
-      // Update price/name if needed:
       price: cakes.find((c) => c.id === parseInt(id))?.price || 0,
       name: cakes.find((c) => c.id === parseInt(id))?.name || "",
     });
-
-    // console.log("Selected flavor:", flavor);
-    // console.log("handle flavor log", selectedCakes);
   };
 
   const handleShapeSelection = (index: number, id: string) => {
@@ -89,17 +79,9 @@ function ItemConfiguration() {
         index: index,
         changes: {
           ...updates,
-          inscription: "hello inscription",
-          notes: "hello notes",
         },
       })
     );
-    // dispatch(
-    //   updateCake({
-    //     id: id,
-    //     ...updates,
-    //   })
-    // );
   };
 
   return (
@@ -243,9 +225,11 @@ function ItemConfiguration() {
                   <Textarea
                     id="inscription"
                     value={cake.inscription}
-                    // onChange={(e) =>
-                    //   setOrderData({ ...orderData, inscription: e.target.value })
-                    // }
+                    onChange={(e) =>
+                      updateCakeProperty(index, {
+                        inscription: e.target.value,
+                      })
+                    }
                     placeholder="Enter text to be written on the item"
                     rows={3}
                     className="border-gray-300 focus:border-rose-500 focus:ring-rose-500"
@@ -259,9 +243,11 @@ function ItemConfiguration() {
                   <Textarea
                     id="notes"
                     value={cake.notes}
-                    // onChange={(e) =>
-                    //   setOrderData({ ...orderData, inscription: e.target.value })
-                    // }
+                    onChange={(e) =>
+                      updateCakeProperty(index, {
+                        notes: e.target.value,
+                      })
+                    }
                     placeholder="Enter special instructions"
                     rows={3}
                     className="border-gray-300 focus:border-rose-500 focus:ring-rose-500"
