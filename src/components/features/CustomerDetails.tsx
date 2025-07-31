@@ -58,11 +58,7 @@ function CustomerDetails() {
 
   const handleAddCustomer = () => {
     console.log(name + phone + email);
-    const customerObject = {
-      name,
-      phone,
-      email,
-    };
+
     const customer: Customer = {
       id: Date.now().toString(),
       name: name,

@@ -17,12 +17,6 @@ export interface OrderData {
   cakes: Cake[];
   selectedCakes: Cake[];
   shapes: Shape[];
-  selectedShape: Shape | null;
-
-  inscription: string;
-  selectedDesigns: Design[];
-  photoOption: PhotoOption;
-  basePrice: number;
   advancePayment: number;
   salesExecutive: string;
   deliveryDate: string;
@@ -36,14 +30,6 @@ export interface Design {
   price: number;
 }
 
-// export interface Cake {
-//   id: number;
-//   name: string;
-//   price: number;
-//   image: string;
-//   searchCode: string;
-// }
-
 export interface Cake {
   id: number;
   name: string;
@@ -52,11 +38,12 @@ export interface Cake {
   quantity: number;
   halfPhoto: boolean;
   fullPhoto: boolean;
+  flavorId: number;
   cakeShapeId: number | null;
   selectedDesignChargeIds: number[];
   additionalDesign: string;
   customDesignCharge: number;
-  writing: string;
+  inscription: string;
   notes: string;
 }
 

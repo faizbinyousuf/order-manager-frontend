@@ -1,6 +1,4 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CameraIcon } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 
@@ -11,43 +9,35 @@ function PhotoPrint() {
   const [photoPrint, setPhotoPrint] = React.useState(false);
 
   return (
-    <>
-      <Card className="border border-gray-200 shadow-sm">
-        <CardHeader className="border-b border-gray-100 bg-white">
-          <CardTitle className="flex items-center gap-3">
-            <CameraIcon className="h-5 w-5" />
-            Photo Print
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center gap-3">
-            <Checkbox
-              id="photoprint"
-              checked={photoPrint}
-              onCheckedChange={(checked: boolean) => setPhotoPrint(checked)}
-            />
-            <Label htmlFor="photoprint">Add photo print </Label>
+    <div className="space-y-5 ">
+      <div className=" flex items-center gap-3 ">
+        <Checkbox
+          id="photoprint"
+          checked={photoPrint}
+          onCheckedChange={(checked: boolean) => setPhotoPrint(checked)}
+        />
+        <Label htmlFor="photoprint">Add photo print </Label>
+      </div>
+      {photoPrint && (
+        <RadioGroup defaultValue="option-one">
+          <Label className="mt-1 ml-4 font-[500]">Photo Size</Label>
+          <div className=" flex items-center space-x-2    ml-4">
+            <RadioGroupItem value="option-one" id="option-one" />
+            <Label className="font-normal text-xs mr-8" htmlFor="option-one">
+              Half Size
+            </Label>
+            <RadioGroupItem value="option-two" id="option-two" />
+            <Label className="font-normal text-xs" htmlFor="option-two">
+              Full Size
+            </Label>
           </div>
-          {photoPrint && (
-            <RadioGroup defaultValue="option-one">
-              <Label className="mt-6 ml-4 font-[500]">Photo Size</Label>
-              <div className="flex items-center space-x-2 mt-2  ml-4">
-                <RadioGroupItem value="option-one" id="option-one" />
-                <Label className="mr-8" htmlFor="option-one">
-                  Half Size
-                </Label>
-                <RadioGroupItem value="option-two" id="option-two" />
-                <Label htmlFor="option-two">Full Size</Label>
-              </div>
-              <div className="mt-6 ml-4  w-full max-w-sm">
-                <Label className=" mb-3 font-[500]">Upload Photo</Label>
-                <Input id="picture" type="file" />
-              </div>
-            </RadioGroup>
-          )}
-        </CardContent>
-      </Card>
-    </>
+          <div className=" mt-2 ml-4  w-full max-w-sm space-y-3">
+            <Label className="  font-[500]">Upload Photo</Label>
+            <Input id="picture" type="file" />
+          </div>
+        </RadioGroup>
+      )}
+    </div>
   );
 }
 

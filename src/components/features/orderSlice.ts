@@ -1,12 +1,5 @@
-import type {
-  Cake,
-  Customer,
-  Design,
-  OrderData,
-  PhotoOption,
-  Shape,
-} from "@/types/OrderTypes";
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { Cake, Customer, OrderData, Shape } from "@/types/OrderTypes";
+import { createSlice, current, type PayloadAction } from "@reduxjs/toolkit";
 
 const customers = [
   {
@@ -36,13 +29,14 @@ const flavors: Cake[] = [
     price: 50,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
   {
@@ -51,13 +45,14 @@ const flavors: Cake[] = [
     price: 60,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
   {
@@ -66,13 +61,14 @@ const flavors: Cake[] = [
     price: 55,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
   {
@@ -81,13 +77,14 @@ const flavors: Cake[] = [
     price: 45,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
   {
@@ -96,13 +93,14 @@ const flavors: Cake[] = [
     price: 40,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
   {
@@ -111,13 +109,14 @@ const flavors: Cake[] = [
     price: 55,
     searchCode: null,
     quantity: 0,
+    flavorId: 0,
     halfPhoto: false,
     fullPhoto: false,
     cakeShapeId: null,
     selectedDesignChargeIds: [],
     additionalDesign: "",
     customDesignCharge: 0,
-    writing: "",
+    inscription: "",
     notes: "",
   },
 ];
@@ -151,15 +150,6 @@ const initialState: OrderData = {
   cakes: flavors,
   selectedCakes: [],
   shapes: shapes,
-  selectedShape: null,
-  inscription: "",
-  selectedDesigns: [],
-  photoOption: {
-    enabled: false,
-    size: "half",
-    file: null,
-  },
-  basePrice: 50,
   advancePayment: 0,
   salesExecutive: "",
   deliveryDate: "",
@@ -183,21 +173,65 @@ export const orderSlice = createSlice({
     setShapes: (state, action: PayloadAction<Shape[]>) => {
       state.shapes = action.payload;
     },
-    setSelectedCakes: (state, action: PayloadAction<Cake[]>) => {
-      state.selectedCakes.push(...action.payload);
+    addSelectedCake: (state, action: PayloadAction<Cake>) => {
+      state.selectedCakes.push(action.payload);
     },
-    setInscription: (state, action: PayloadAction<string>) => {
-      state.inscription = action.payload;
+    removeCakeSelection(state, action: PayloadAction<number>) {
+      state.selectedCakes = state.selectedCakes.filter(
+        (cake) => cake.id !== action.payload
+      );
     },
-    setSelectedDesigns: (state, action: PayloadAction<Design[]>) => {
-      state.selectedDesigns = action.payload;
+    updateInscription: (
+      state,
+      action: PayloadAction<{ id: number; inscription: string }>
+    ) => {
+      state.cakes = state.cakes.map((cake) =>
+        cake.id === action.payload.id
+          ? { ...cake, inscription: action.payload.inscription }
+          : cake
+      );
     },
-    setPhotoOption: (state, action: PayloadAction<PhotoOption>) => {
-      state.photoOption = action.payload;
+
+    // updateCake: (
+    //   state,
+    //   action: PayloadAction<Partial<Cake> & { id: number }>
+    // ) => {
+    //   console.log("Updating in slice:", action.payload);
+    //   state.selectedCakes = state.selectedCakes.map((cake) =>
+    //     cake.id === action.payload.id ? { ...cake, ...action.payload } : cake
+    //   );
+    // },
+
+    updateCake: (
+      state,
+      action: PayloadAction<{
+        index: number;
+        changes: Partial<Cake>;
+      }>
+    ) => {
+      const { index, changes } = action.payload;
+      console.log("payload   in slice:", index, changes);
+      state.selectedCakes[index] = {
+        ...state.selectedCakes[index],
+        ...changes,
+      };
+      console.log("Updated   in slice:", state.selectedCakes[index]);
+      console.log("Current all in slice:", current(state.selectedCakes));
     },
-    setBasePrice: (state, action: PayloadAction<number>) => {
-      state.basePrice = action.payload;
-    },
+
+    /////////////////
+    // setInscription: (state, action: PayloadAction<string>) => {
+    //   state.inscription = action.payload;
+    // },
+    // setSelectedDesigns: (state, action: PayloadAction<Design[]>) => {
+    //   state.selectedDesigns = action.payload;
+    // },
+    // setPhotoOption: (state, action: PayloadAction<PhotoOption>) => {
+    //   state.photoOption = action.payload;
+    // },
+    // setBasePrice: (state, action: PayloadAction<number>) => {
+    //   state.basePrice = action.payload;
+    // },
     setAdvancePayment: (state, action: PayloadAction<number>) => {
       state.advancePayment = action.payload;
     },
@@ -218,16 +252,7 @@ export const orderSlice = createSlice({
       state.customers = [];
       state.cakes = [];
       state.shapes = [];
-      state.selectedShape = null;
       state.selectedCakes = [];
-      state.inscription = "";
-      state.selectedDesigns = [];
-      state.photoOption = {
-        enabled: false,
-        size: "half",
-        file: null,
-      };
-      state.basePrice = 50;
       state.advancePayment = 0;
       state.salesExecutive = "";
       state.deliveryDate = "";
@@ -240,10 +265,13 @@ export const orderSlice = createSlice({
 export const {
   setCustomer,
   setCakes,
-  setInscription,
-  setSelectedDesigns,
   setShapes,
   addCustomer,
+  addSelectedCake,
+  updateCake,
+  updateInscription,
+  removeCakeSelection,
+  resetOrder,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
