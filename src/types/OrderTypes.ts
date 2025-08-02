@@ -5,11 +5,11 @@ export interface Customer {
   phone?: string;
 }
 
-export interface PhotoOption {
-  enabled: boolean;
-  size: "half" | "full";
-  file: File | null;
-}
+// export interface PhotoOption {
+//   enabled: boolean;
+//   size: "half" | "full";
+//   file: File | null;
+// }
 
 export interface OrderData {
   selectedCustomer: Customer | null;
@@ -17,6 +17,7 @@ export interface OrderData {
   cakes: Cake[];
   selectedCakes: Cake[];
   shapes: Shape[];
+  designs: Design[];
   advancePayment: number;
   salesExecutive: string;
   deliveryDate: string;
@@ -28,8 +29,8 @@ export interface Design {
   id: number;
   name: string;
   price: number;
+  image: string;
 }
-
 export interface Cake {
   id: number;
   name: string;
@@ -45,6 +46,7 @@ export interface Cake {
   customDesignCharge: number;
   inscription: string;
   notes: string;
+  // photoOption:PhotoOption | null
 }
 
 export interface Shape {

@@ -2,6 +2,17 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CakeIcon, Edit3, Plus, Settings, Trash2 } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import {
   Select,
@@ -20,13 +31,26 @@ import DesignSelection from "./DesignSelection";
 import PhotoPrint from "./PhotoPrint";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import type { Cake } from "@/types/OrderTypes";
-import { addSelectedCake, removeCakeSelection, updateCake } from "./orderSlice";
+import type { Cake, Design } from "@/types/OrderTypes";
+import {
+  addSelectedCake,
+  removeCakeSelection,
+  selectCakeTotal,
+  selectGrandTotal,
+  selectRemainingBalance,
+  updateCake,
+} from "../../app/orderSlice";
 function ItemConfiguration() {
   const dispatch = useAppDispatch();
   const cakes = useAppSelector((state) => state.order.cakes);
   const shapes = useAppSelector((state) => state.order.shapes);
   const selectedCakes = useAppSelector((state) => state.order.selectedCakes);
+  const designs = useAppSelector((state) => state.order.designs);
+
+  // Total Related Selectors
+  const grandTotal = useAppSelector(selectGrandTotal);
+
+  const remainingBalance = useAppSelector(selectRemainingBalance);
 
   const addNewCake = () => {
     const newCake: Cake = {
@@ -44,13 +68,52 @@ function ItemConfiguration() {
       price: 0,
       quantity: 0,
       flavorId: 0,
+      // photoOption: null,
     };
 
     dispatch(addSelectedCake(newCake));
   };
+  const calculateCakeTotal = (cake: Cake): number => {
+    // Base cake price
+    let total = cake.price * cake.quantity;
+    console.log("qty", cake.quantity);
 
+    // Photo charges
+    if (cake.halfPhoto) {
+      total += 100;
+    } else if (cake.fullPhoto) {
+      total += 200;
+    }
+
+    // Design charges (assuming selectedDesignChargeIds contains design IDs)
+    // You'll need to access your designs array to get prices
+    console.log("des ids", cake.selectedDesignChargeIds);
+    const designCharges = cake.selectedDesignChargeIds.reduce(
+      (sum, designId) => {
+        const design = designs.find((d) => d.id === designId);
+        return sum + (design?.price || 0);
+      },
+      0
+    );
+    console.log("des charges in config", designCharges);
+
+    total += designCharges;
+
+    // Additional custom design charge
+    total += cake.customDesignCharge;
+    console.log("total in config", total);
+
+    return total;
+  };
   const removeCake = (id: number) => {
-    dispatch(removeCakeSelection(id));
+    console.log(calculateCakeTotal(selectedCakes[0]));
+    let grandTotal = 0;
+    selectedCakes.forEach((cake) => {
+      grandTotal += calculateCakeTotal(cake);
+      console.log("GRAND TOTAL", grandTotal);
+    });
+
+    // dispatch(removeCakeSelection(id));
   };
   const handleFlavorSelection = (index: number, id: string) => {
     console.log(" id", id);
@@ -59,6 +122,7 @@ function ItemConfiguration() {
       flavorId: parseInt(id),
       price: cakes.find((c) => c.id === parseInt(id))?.price || 0,
       name: cakes.find((c) => c.id === parseInt(id))?.name || "",
+      quantity: 1,
     });
   };
 
@@ -128,14 +192,41 @@ function ItemConfiguration() {
                   <Edit3 className="h-4 w-4 text-gray-400" />
                   Item #{selectedCakes.indexOf(cake) + 1}
                 </h3>
-                <Button
-                  variant="outline"
-                  onClick={() => removeCake(cake.id)}
-                  size="sm"
-                  className="border-red-300   text-red-600 hover:bg-red-50 hover:border-red-400 rounded-sm"
-                >
-                  <Trash2 strokeWidth={1} className="h-1 w-1 " />
-                </Button>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button
+                      variant="outline"
+                      // onClick={() => removeCake(cake.id)}
+                      size="sm"
+                      className="border-red-300   text-red-600 hover:bg-red-50 hover:border-red-400 rounded-sm"
+                    >
+                      <Trash2 strokeWidth={1} className="h-1 w-1 " />
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>
+                        Are you absolutely sure?
+                      </AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will remove the current selected cake and all the
+                        informations associated with it. Click continue to
+                        remove.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={(e) => {
+                          e.preventDefault();
+                          removeCake(cake.id);
+                        }}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </div>
               <div className="grid md:grid-cols-3 gap-6  ">
                 <div>
@@ -211,7 +302,32 @@ function ItemConfiguration() {
                   >
                     Quantity
                   </Label>
-                  <Input id="quantity" type="number" placeholder="1" />
+                  <Input
+                    id="quantity"
+                    type="number"
+                    min="1"
+                    step="1"
+                    defaultValue={1}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value);
+                      if (value > 0) {
+                        updateCakeProperty(index, { quantity: value });
+                      }
+                    }}
+                    onFocus={(e) => {
+                      e.target.select();
+                    }}
+                    onWheel={(e) => {
+                      // Prevent scroll wheel from changing the value
+                      e.currentTarget.blur();
+                    }}
+                    onBlur={(e) => {
+                      const value = Math.max(1, parseInt(e.target.value) || 1);
+                      updateCakeProperty(index, { quantity: value });
+                      e.target.value = value.toString(); // Force correct value in input
+                    }}
+                    placeholder="1"
+                  />
                 </div>
               </div>
 
@@ -259,7 +375,8 @@ function ItemConfiguration() {
                 <Label className=" mb-2   text-gray-700" htmlFor="price">
                   Base Price
                 </Label>
-                <Input readOnly defaultValue={selectedCakes?.length}></Input>
+
+                <Input readOnly value={cake.price} />
               </div>
               <Label
                 className="mb-2 mt-2   text-gray-700"
@@ -267,10 +384,18 @@ function ItemConfiguration() {
               >
                 Design Selection
               </Label>
-              <DesignSelection />
+              <DesignSelection
+                cake={cake}
+                onDesignChange={(selectedIds) => {
+                  console.log("sds in config", selectedIds);
+                  updateCakeProperty(index, {
+                    selectedDesignChargeIds: selectedIds,
+                  });
+                }}
+              />
 
               {/* Photo print section */}
-              <PhotoPrint />
+              <PhotoPrint cake={cake} />
               <Separator />
 
               <div className="flex justify-between items-center">
@@ -278,17 +403,7 @@ function ItemConfiguration() {
                   Cake Total:
                 </span>
                 <span className="text-lg font-medium text-gray-900">
-                  $80
-                  {/* {(
-                    (cake.basePrice +
-                      (cake.selectedDesign?.charge || 0) +
-                      (cake.photoOption.enabled
-                        ? cake.photoOption.size === "half"
-                          ? 10
-                          : 20
-                        : 0)) *
-                    cake.quantity
-                  ).toFixed(2)} */}
+                  ${calculateCakeTotal(cake).toFixed(2)}
                 </span>
               </div>
             </div>

@@ -1,63 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 
-interface Design {
-  id: number;
-  name: string;
-  price: number;
-  image: string;
+import type { Cake, Design } from "@/types/OrderTypes";
+import { useAppSelector } from "@/app/hooks";
+import { updateCake } from "@/app/orderSlice";
+interface DesignSelectionProps {
+  cake: Cake;
+  onDesignChange: (ids: number[]) => void;
 }
-function DesignSelection() {
-  const designs: Design[] = [
-    {
-      id: 1,
-      name: "Floral Pattern",
-      price: 25,
-      image: "https://picsum.photos/200/100",
-    },
-    {
-      id: 2,
-      name: "Geometric Pattern",
-      price: 30,
-      image: "https://picsum.photos/200/100",
-    },
-    {
-      id: 3,
-      name: "Abstract Pattern",
-      price: 20,
-      image: "https://picsum.photos/200/100",
-    },
-    {
-      id: 4,
-      name: "Floral Pattern",
-      price: 25,
-      image: "https://picsum.photos/200/100",
-    },
-    {
-      id: 5,
-      name: "Geometric Pattern",
-      price: 30,
-      image: "https://picsum.photos/200/100",
-    },
-    {
-      id: 6,
-      name: "Abstract Pattern",
-      price: 20,
-      image: "https://picsum.photos/200/100",
-    },
-  ];
-
+function DesignSelection({ cake, onDesignChange }: DesignSelectionProps) {
   const [selectedDesignIds, setSelectedDesignIds] = React.useState<number[]>(
-    []
+    cake.selectedDesignChargeIds || []
   );
+  const selectedCakes = useAppSelector((state) => state.order.selectedCakes);
+
+  const designs = useAppSelector((state) => state.order.designs);
+  // Sync local state with cake prop when it changes
+  React.useEffect(() => {
+    setSelectedDesignIds(cake.selectedDesignChargeIds || []);
+  }, [cake.selectedDesignChargeIds]);
+
   const onTapDesign = (id: number) => {
-    if (selectedDesignIds.includes(id)) {
-      setSelectedDesignIds(
-        selectedDesignIds.filter((designId) => designId !== id)
-      );
-    } else {
-      setSelectedDesignIds([...selectedDesignIds, id]);
-    }
-    console.log(selectedDesignIds);
+    setSelectedDesignIds((prev) => {
+      const newIds = prev.includes(id)
+        ? prev.filter((designId) => designId !== id)
+        : [...prev, id];
+
+      console.log("sdsd", newIds);
+
+      // Call onDesignChange in a separate effect or use setTimeout to avoid calling during render
+      //   use setTimeout with 0 delay to defer the call to the next tick
+      setTimeout(() => {
+        onDesignChange(newIds);
+      }, 0);
+      return newIds;
+    });
   };
   return (
     <div className="space-y-4">
@@ -67,7 +44,9 @@ function DesignSelection() {
             design={design}
             key={design.id}
             onTapDesign={onTapDesign}
-            isSelected={selectedDesignIds.includes(design.id)}
+            isSelected={
+              cake.selectedDesignChargeIds.includes(design.id) || false
+            }
           />
         ))}
       </div>
@@ -84,7 +63,7 @@ const DesignCard = (props: DesignCardProps) => {
   const design = props.design;
   const isSelected = props.isSelected;
   const style = isSelected
-    ? "border-1  bg-purple-50 border-purple-400 rounded-lg p-4 cursor-pointer text-left"
+    ? "border-1  bg-pink-50 border-pink-400 rounded-lg p-4 cursor-pointer text-left"
     : "border  rounded-lg p-4 cursor-pointer text-left";
 
   return (

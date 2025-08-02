@@ -6,6 +6,12 @@ import { Label } from "../ui/label";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+import {
+  selectIsFormValid,
+  selectIsFormValidBoolean,
+  // selectIsFormValidBoolean,
+} from "../../app/orderSlice";
+import { useAppSelector, useAppDispatch } from "@/app/hooks";
 
 import {
   Popover,
@@ -19,6 +25,9 @@ function DeliveryAddress() {
   const [time, setTime] = React.useState<Date | undefined>(new Date());
   const [openDate, setOpenDate] = React.useState(false);
   const [openTime, setOpenTime] = React.useState(false);
+
+  // const formValidation = useAppSelector(selectIsFormValid);
+  const isFormValid = useAppSelector(selectIsFormValidBoolean);
 
   return (
     <>
@@ -110,7 +119,15 @@ function DeliveryAddress() {
               className="border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500"
             />
           </div>
-          <Button className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-base font-medium mt-5">
+          <Button
+            disabled={!isFormValid}
+            className={`${
+              !isFormValid
+                ? "opacity-50 cursor-not-allowed w-full text-white py-3 text-base font-medium mt-5"
+                : "w-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-base font-medium mt-5"
+            }`}
+            // className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-base font-medium mt-5"
+          >
             Submit Order
           </Button>
           <p className="text-sm text-gray-600 mt-3 text-center">

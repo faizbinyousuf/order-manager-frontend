@@ -33,7 +33,7 @@ import { Input } from "../ui/input";
 // import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 
-import { addCustomer, setCustomer } from "./orderSlice";
+import { addCustomer, setCustomer } from "../../app/orderSlice";
 import type { Customer } from "@/types/OrderTypes";
 
 function CustomerDetails() {
