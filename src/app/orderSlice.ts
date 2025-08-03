@@ -88,6 +88,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
   {
@@ -105,6 +106,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
   {
@@ -122,6 +124,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
   {
@@ -139,6 +142,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
   {
@@ -156,6 +160,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
   {
@@ -173,6 +178,7 @@ const flavors: Cake[] = [
     customDesignCharge: 0,
     inscription: "",
     notes: "",
+    file: "",
     //photoOption: null,
   },
 ];

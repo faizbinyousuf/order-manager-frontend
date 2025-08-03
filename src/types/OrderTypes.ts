@@ -48,6 +48,7 @@ export interface Cake {
   customDesignCharge: number;
   inscription: string;
   notes: string;
+  file: string;
   // photoOption:PhotoOption | null
 }
 

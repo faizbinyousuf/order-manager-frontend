@@ -68,6 +68,7 @@ function ItemConfiguration() {
       price: 0,
       quantity: 0,
       flavorId: 0,
+      file: null,
       // photoOption: null,
     };
 

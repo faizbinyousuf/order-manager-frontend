@@ -3,20 +3,11 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Input } from "../ui/input";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import type { Cake } from "@/types/OrderTypes";
 import { updateCake, setAdvancePayment } from "@/app/orderSlice";
-import {
-  CameraIcon,
-  Image,
-  ImageOff,
-  Images,
-  Package,
-  Printer,
-  Truck,
-} from "lucide-react";
+import { Camera, CameraIcon, Image, Images } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface PhotoPrintProps {
@@ -39,11 +30,17 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
           onClick: () => console.log("Undo"),
         },
       });
-      return; // Only return if flavor is not selected
+      return;
     }
     console.log("toggle photo", option);
 
     setPhotoPrint(option);
+    if (cake.quantity > 1) {
+      handleSizeChange("full");
+    } else {
+      handleSizeChange("half");
+    }
+
     if (!option) {
       // When turning off photo print, reset the size selection
       setPhotoSize("");
@@ -60,6 +57,32 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
         })
       );
       dispatch(setAdvancePayment(0));
+    }
+  };
+
+  const handleFileUpload = (
+    cakeId: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const cake = selectedCakes.find((c) => c.id === cakeId);
+    console.log("cake id in photoPrint ", cake?.id);
+    const cakeIndex = selectedCakes.findIndex((c) => c.id === cake!.id);
+    console.log("cake index found", cakeIndex);
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const convertedFile = URL.createObjectURL(file);
+
+      dispatch(
+        updateCake({
+          index: cakeIndex,
+          changes: {
+            ...{
+              file: convertedFile,
+            },
+          },
+        })
+      );
     }
   };
 
@@ -102,7 +125,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
           >
             Add Photo Print to Cake
           </Label>
-          <p className="text-[10px] text-rose-600">
+          <p className="text-xs text-rose-600">
             Make your cake stand out with a photo
           </p>
         </div>
@@ -119,7 +142,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
 
             <div className="flex justify-between w-full  gap-4   mt-3">
               <Button
-                onClick={() => setPhotoSize("half")}
+                onClick={() => handleSizeChange("half")}
                 variant={"link"}
                 className={`hover:no-underline flex-1 relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-24 text-left flex flex-col items-start shadow-none hover:shadow-none ${
                   photoSize === "half"
@@ -145,7 +168,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
               </Button>
 
               <Button
-                onClick={() => setPhotoSize("full")}
+                onClick={() => handleSizeChange("full")}
                 variant={"link"}
                 className={` flex-1  relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md hover:no-underline min-h-24 text-left flex flex-col items-start ${
                   photoSize === "full"
@@ -171,10 +194,81 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
               </Button>
             </div>
 
-            <div className=" mt-3  w-full max-w-sm space-y-3">
-              <Label className="  font-[500]">Upload Photo</Label>
-              <Input id="picture" type="file" />
+            <div className="flex justify-between items-center">
+              <div className=" mt-3 w-1/2 space-y-3 pr-2 ">
+                <Label className=" font-semibold text-sm">Upload Photo </Label>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(cake.id, e)}
+                  className=" w-full  mr-3"
+                  id={`photo-upload-${cake.id}`}
+                />
+
+                {/* <div className="relative ">
+                <Input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => handleFileUpload(cake.id, e)}
+                  className="hidden"
+                  id={`photo-upload-${cake.id}`}
+                />
+                <label
+                  htmlFor={`photo-upload-${cake.id}`}
+                  className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-rose-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50 transition-all group"
+                >
+                  <div className="p-3 bg-rose-100 rounded-full group-hover:bg-rose-200 transition-colors mb-3">
+                    <Camera className="h-6 w-6 text-rose-600" />
+                  </div>
+                  <p className="text-sm font-semibold text-gray-700 mb-1">
+                    Click to upload photo
+                  </p>
+                  <p className="text-xs text-gray-500 text-center">
+                    PNG, JPG up to 10MB
+                    <br />
+                    High resolution recommended for best quality
+                  </p>
+                </label>
+              </div> */}
+              </div>
+              <div className="mt-5 mr-8 rounded-2xl">
+                <img
+                  src={cake.file}
+                  alt="photo_cake_image"
+                  className="h-32 w-32 rounded-lg"
+                />
+              </div>
             </div>
+
+            {/*  */}
+            {/* <div className="mt-4 p-4 bg-green-50 rounded-xl border border-green-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-green-100 rounded-full">
+                  <Camera className="h-4 w-4 text-green-600" />
+                </div>
+                <div className="flex flex-col items-start">
+                  <p className="text-sm font-semibold text-green-800">
+                    Photo uploaded successfully!
+                  </p>
+                  <p className="text-xs text-green-600">{"file_name"}</p>
+                </div>
+                <div className="text-green-600 ml-auto">
+                  <svg
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              </div>
+            </div> */}
           </div>
         </div>
       )}
