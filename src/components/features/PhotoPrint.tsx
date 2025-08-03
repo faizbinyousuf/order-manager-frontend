@@ -231,11 +231,11 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
                 </label>
               </div> */}
               </div>
-              <div className="mt-5 mr-8 rounded-2xl">
+              <div className="mt-5 mr-8 border-2 p-0 rounded-lg border-rose-500">
                 <img
                   src={cake.file}
                   alt="photo_cake_image"
-                  className="h-32 w-32 rounded-lg"
+                  className="h-32 w-32 rounded-lg  object-cover  "
                 />
               </div>
             </div>
