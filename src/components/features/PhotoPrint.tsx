@@ -120,8 +120,8 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
             <div className="flex justify-between w-full  gap-4   mt-3">
               <Button
                 onClick={() => setPhotoSize("half")}
-                variant={"ghost"}
-                className={` flex-1 relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-24 text-left flex flex-col items-start shadow-none hover:shadow-none ${
+                variant={"link"}
+                className={`hover:no-underline flex-1 relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-24 text-left flex flex-col items-start shadow-none hover:shadow-none ${
                   photoSize === "half"
                     ? "border-rose-500 bg-rose-50  "
                     : "border-gray-200 hover:border-rose-300"
@@ -146,8 +146,8 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
 
               <Button
                 onClick={() => setPhotoSize("full")}
-                variant={"ghost"}
-                className={` flex-1  relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md min-h-24 text-left flex flex-col items-start ${
+                variant={"link"}
+                className={` flex-1  relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md hover:no-underline min-h-24 text-left flex flex-col items-start ${
                   photoSize === "full"
                     ? "border-rose-500 bg-rose-50 shadow-sm"
                     : "border-gray-200 hover:border-rose-300"

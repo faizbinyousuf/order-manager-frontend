@@ -78,8 +78,8 @@ function DeliveryAddress() {
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Button
               onClick={() => dispatch(setDeliveryMode("takeaway"))}
-              variant={"ghost"}
-              className={`  relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-18 text-left flex flex-col items-start shadow-none hover:shadow-none ${
+              variant={"link"}
+              className={`hover:no-underline  relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-18 text-left flex flex-col items-start shadow-none hover:shadow-none ${
                 deliveryMode === "takeaway"
                   ? "border-rose-500 bg-rose-50  "
                   : "border-gray-200 hover:border-rose-300"
@@ -99,8 +99,8 @@ function DeliveryAddress() {
 
             <Button
               onClick={() => dispatch(setDeliveryMode("home_delivery"))}
-              variant={"ghost"}
-              className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md min-h-18 text-left flex flex-col items-start ${
+              variant={"link"}
+              className={`hover:no-underline relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md min-h-18 text-left flex flex-col items-start ${
                 deliveryMode === "home_delivery"
                   ? "border-rose-500 bg-rose-50 shadow-sm"
                   : "border-gray-200 hover:border-rose-300"
