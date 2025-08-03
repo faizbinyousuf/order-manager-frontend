@@ -1,4 +1,5 @@
-import React from "react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { CreditCardIcon } from "lucide-react";
 import { Label } from "../ui/label";
@@ -17,6 +18,7 @@ import {
   selectGrandTotal,
   selectRemainingBalance,
   setAdvancePayment,
+  setSalesExecutive,
 } from "@/app/orderSlice";
 function PaymentDetails() {
   const salesExecutives = [
@@ -30,6 +32,11 @@ function PaymentDetails() {
   const grandTotal = useAppSelector(selectGrandTotal);
   const advanceAmount = useAppSelector((state) => state.order.advancePayment);
   const dispatch = useAppDispatch();
+
+  const handleSalesExecutiveSelection = (salesExecutive: string) => {
+    console.log("Selected sales executive:", salesExecutive);
+    dispatch(setSalesExecutive(salesExecutive));
+  };
 
   return (
     <>
@@ -94,9 +101,7 @@ function PaymentDetails() {
             <div className="grid  gap-2">
               <Label htmlFor="salesExecutive">Sales Executive</Label>
               <Select
-              // onValueChange={(value) =>
-              //   setOrderData({ ...orderData, salesExecutive: value })
-              // }
+                onValueChange={(value) => handleSalesExecutiveSelection(value)}
               >
                 <SelectTrigger className="border-gray-300 w-full ">
                   <SelectValue placeholder="Select sales executive" />

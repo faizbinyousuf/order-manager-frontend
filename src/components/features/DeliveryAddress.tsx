@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Truck } from "lucide-react";
+import { Package, Truck } from "lucide-react";
 import { Label } from "../ui/label";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
+
 import {
   selectIsFormValid,
   selectIsFormValidBoolean,
@@ -20,14 +22,48 @@ import {
 } from "@/components/ui/popover";
 
 import { Textarea } from "../ui/textarea";
-function DeliveryAddress() {
-  const [date, setDate] = React.useState<Date | undefined>(new Date());
-  const [time, setTime] = React.useState<Date | undefined>(new Date());
-  const [openDate, setOpenDate] = React.useState(false);
-  const [openTime, setOpenTime] = React.useState(false);
+import {
+  setDeliveryDate,
+  setDeliveryAddress,
+  setDeliveryTime,
+  setDeliveryMode,
+} from "../../app/orderSlice";
+import TimePicker from "../custom/time-picker";
 
-  // const formValidation = useAppSelector(selectIsFormValid);
+function DeliveryAddress() {
+  const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [time, setTime] = React.useState("");
+  const [openDate, setOpenDate] = React.useState(false);
+
+  const [address, setAddress] = React.useState("");
+  const dispatch = useAppDispatch();
+
+  const handleDeliveryDateSelection = (date: string) => {
+    console.log("date selected  :", date);
+    dispatch(setDeliveryDate(date));
+  };
+
+  const handleDeliveryAddressSelection = (address: string) => {
+    console.log("addres selected  :", address);
+    setAddress(address);
+    dispatch(setDeliveryAddress(address));
+  };
+
+  const handleDeliveryTimeSelection = (time: string) => {
+    console.log("time selected  :", time);
+    dispatch(setDeliveryTime(time));
+  };
+
+  const formValidation = useAppSelector(selectIsFormValid);
   const isFormValid = useAppSelector(selectIsFormValidBoolean);
+  const deliveryMode = useAppSelector((state) => state.order.deliveryMode);
+
+  const showErrors = () => {
+    console.log("errors", formValidation.errors);
+    formValidation.errors.forEach((error) => {
+      console.log("errors", error);
+    });
+  };
 
   return (
     <>
@@ -39,7 +75,53 @@ function DeliveryAddress() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <Button
+              onClick={() => dispatch(setDeliveryMode("takeaway"))}
+              variant={"ghost"}
+              className={`  relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-18 text-left flex flex-col items-start shadow-none hover:shadow-none ${
+                deliveryMode === "takeaway"
+                  ? "border-rose-500 bg-rose-50  "
+                  : "border-gray-200 hover:border-rose-300"
+              }`}
+            >
+              <div className="absolute top-3 right-3 border-rose-400" />
+              <div className="space-y-2 w-full">
+                <div className="flex items-center gap-2">
+                  <Package className="h-5 w-5 text-rose-600" />
+                  <span className="font-semibold text-gray-800">Takeaway</span>
+                </div>
+                <p className="text-sm text-gray-600 text-left">
+                  Customer will pick up from store
+                </p>
+              </div>
+            </Button>
+
+            <Button
+              onClick={() => dispatch(setDeliveryMode("home_delivery"))}
+              variant={"ghost"}
+              className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md min-h-18 text-left flex flex-col items-start ${
+                deliveryMode === "home_delivery"
+                  ? "border-rose-500 bg-rose-50 shadow-sm"
+                  : "border-gray-200 hover:border-rose-300"
+              }`}
+            >
+              <div className="absolute top-3 right-3 border-rose-400" />
+              <div className="space-y-2 w-full">
+                <div className="flex items-center gap-2">
+                  <Truck className="h-5 w-5 text-rose-600" />
+                  <span className="font-semibold text-gray-800">
+                    Home Delivery
+                  </span>
+                </div>
+                <p className="text-sm text-gray-600 text-left">
+                  We will deliver to customer address
+                </p>
+              </div>
+            </Button>
+          </div>
           <div className="grid md:grid-cols-2 gap-6">
+            {/* Delivery Date and Time Selector */}
             <div className="grid text-left  gap-2">
               <Label htmlFor="date">Delivery Date</Label>
               <div>
@@ -49,6 +131,13 @@ function DeliveryAddress() {
                       variant="outline"
                       id="date"
                       className="w-full rounded-sm justify-between font-normal"
+                      // className={
+                      //   !formValidation.errors.includes(
+                      //     "Delivery date is required"
+                      //   )
+                      //     ? "w-full rounded-sm justify-between font-normal"
+                      //     : "w-full rounded-sm justify-between font-normal border-red-500  "
+                      // }
                     >
                       {date ? date.toLocaleDateString() : "Select date"}
                       <ChevronDownIcon />
@@ -63,7 +152,7 @@ function DeliveryAddress() {
                       selected={date}
                       captionLayout="dropdown"
                       onSelect={(date) => {
-                        console.log("two");
+                        handleDeliveryDateSelection(date!.toString());
                         setDate(date);
                         setOpenDate(false);
                       }}
@@ -75,35 +164,17 @@ function DeliveryAddress() {
             <div className="grid text-left  gap-2">
               <Label htmlFor="time">Delivery Time</Label>
               <div>
-                <Popover open={openTime} onOpenChange={setOpenTime}>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      id="time"
-                      className="w-full rounded-sm justify-between font-normal"
-                    >
-                      {time ? time.toLocaleDateString() : "Select time"}
-                      <ChevronDownIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent
-                    className="w-auto overflow-hidden p-0"
-                    align="start"
-                  >
-                    <Calendar
-                      mode="single"
-                      selected={time}
-                      captionLayout="dropdown"
-                      onSelect={(time) => {
-                        console.log("onSelect", time);
-                        setTime(time);
-                        setOpenTime(false);
-                      }}
-                      title="Select a time"
-                      animate={true}
-                    />
-                  </PopoverContent>
-                </Popover>
+                <TimePicker
+                  value={time}
+                  onChange={handleDeliveryTimeSelection}
+                  placeholder="Choose time"
+                  className="w-full  h-9 px-4 py-2 text-left border border-gray-300 rounded-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-50 focus:border-gray-500 flex items-center justify-between"
+                  // className={
+                  //   !formValidation.errors.includes("Delivery time is required")
+                  //     ? "w-full  h-9 px-4 py-2 text-left border border-gray-300 rounded-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-50 focus:border-gray-500 flex items-center justify-between"
+                  //     : "w-full  h-9 px-4 py-2 text-left border border-red-500 rounded-sm bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-50 focus:border-gray-500 flex items-center justify-between  "
+                  // }
+                />
               </div>
             </div>
           </div>
@@ -111,16 +182,21 @@ function DeliveryAddress() {
             <Label htmlFor="address">Delivery Address</Label>
             <Textarea
               id="deliveryAddress"
-              value="address line 1"
-              onChange={(e) => console.log(e.target.value)}
-              // onChange={(e) => setOrderData({ ...orderData, deliveryAddress: e.target.value })}
+              value={address}
+              onChange={(e) => handleDeliveryAddressSelection(e.target.value)}
               placeholder="Enter complete delivery address"
               rows={3}
-              className="border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500"
+              // className={`border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500 ${
+              //   formValidation.errors.includes("Delivery address is required")
+              //     ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+              //     : ""
+              // }`}
+              className=" border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500"
             />
           </div>
           <Button
             disabled={!isFormValid}
+            onClick={showErrors}
             className={`${
               !isFormValid
                 ? "opacity-50 cursor-not-allowed w-full text-white py-3 text-base font-medium mt-5"
@@ -128,7 +204,7 @@ function DeliveryAddress() {
             }`}
             // className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-base font-medium mt-5"
           >
-            Submit Order
+            Submit
           </Button>
           <p className="text-sm text-gray-600 mt-3 text-center">
             Please fill in all required fields to submit the order

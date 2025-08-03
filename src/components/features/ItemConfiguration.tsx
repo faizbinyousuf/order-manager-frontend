@@ -106,14 +106,7 @@ function ItemConfiguration() {
     return total;
   };
   const removeCake = (id: number) => {
-    console.log(calculateCakeTotal(selectedCakes[0]));
-    let grandTotal = 0;
-    selectedCakes.forEach((cake) => {
-      grandTotal += calculateCakeTotal(cake);
-      console.log("GRAND TOTAL", grandTotal);
-    });
-
-    // dispatch(removeCakeSelection(id));
+    dispatch(removeCakeSelection(id));
   };
   const handleFlavorSelection = (index: number, id: string) => {
     console.log(" id", id);

@@ -5,11 +5,12 @@ export interface Customer {
   phone?: string;
 }
 
-// export interface PhotoOption {
-//   enabled: boolean;
-//   size: "half" | "full";
-//   file: File | null;
-// }
+export const DeliveryMode = {
+  HOME_DELIVERY: "home_delivery",
+  TAKEAWAY: "takeaway",
+} as const;
+export type DeliveryMode = (typeof DeliveryMode)[keyof typeof DeliveryMode];
+// export type DeliveryMode = "home_delivery" | "takeaway";
 
 export interface OrderData {
   selectedCustomer: Customer | null;
@@ -23,6 +24,7 @@ export interface OrderData {
   deliveryDate: string;
   deliveryTime: string;
   deliveryAddress: string;
+  deliveryMode: DeliveryMode;
 }
 
 export interface Design {

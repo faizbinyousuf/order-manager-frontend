@@ -1,10 +1,11 @@
-import type {
-  Cake,
-  Customer,
-  Design,
-  OrderData,
+import {
+  DeliveryMode,
+  type Cake,
+  type Customer,
+  type Design,
+  type OrderData,
   // PhotoOption,
-  Shape,
+  type Shape,
 } from "@/types/OrderTypes";
 import {
   createSelector,
@@ -211,6 +212,7 @@ const initialState: OrderData = {
   deliveryDate: "",
   deliveryTime: "",
   deliveryAddress: "",
+  deliveryMode: DeliveryMode.TAKEAWAY,
 };
 
 export const orderSlice = createSlice({
@@ -237,6 +239,7 @@ export const orderSlice = createSlice({
         (cake) => cake.id !== action.payload
       );
     },
+
     updateInscription: (
       state,
       action: PayloadAction<{ id: number; inscription: string }>
@@ -247,16 +250,6 @@ export const orderSlice = createSlice({
           : cake
       );
     },
-
-    // updateCake: (
-    //   state,
-    //   action: PayloadAction<Partial<Cake> & { id: number }>
-    // ) => {
-    //   console.log("Updating in slice:", action.payload);
-    //   state.selectedCakes = state.selectedCakes.map((cake) =>
-    //     cake.id === action.payload.id ? { ...cake, ...action.payload } : cake
-    //   );
-    // },
 
     updateCake: (
       state,
@@ -277,49 +270,25 @@ export const orderSlice = createSlice({
     setAdvancePayment: (state, action: PayloadAction<number>) => {
       state.advancePayment = action.payload;
     },
-    // updateCakePhotoOption: (
-    //   state,
-    //   action: PayloadAction<{
-    //     cakeId: number;
-    //     photoOption: Partial<PhotoOption>;
-    //   }>
-    // ) => {
-    //   const { cakeId, photoOption } = action.payload;
-    //   const cakeIndex = state.selectedCakes.findIndex(
-    //     (cake) => cake.id === cakeId
-    //   );
-    //   if (cakeIndex >= 0) {
-    //     state.selectedCakes[cakeIndex].photoOption = {
-    //       ...state.selectedCakes[cakeIndex].photoOption,
-    //       ...photoOption,
-    //     } as PhotoOption;
-    //   }
-    // },
 
-    /////////////////
-    // setInscription: (state, action: PayloadAction<string>) => {
-    //   state.inscription = action.payload;
-    // },
-    // setSelectedDesigns: (state, action: PayloadAction<Design[]>) => {
-    //   state.selectedDesigns = action.payload;
-    // },
-    // setPhotoOption: (state, action: PayloadAction<PhotoOption>) => {
-    //   state.photoOption = action.payload;
-    // },
-    // setBasePrice: (state, action: PayloadAction<number>) => {
-    //   state.basePrice = action.payload;
-    // },
+    setDeliveryMode: (state, action: PayloadAction<DeliveryMode>) => {
+      state.deliveryMode = action.payload;
+    },
 
     setSalesExecutive: (state, action: PayloadAction<string>) => {
+      console.log("Sales executive in slice:", action.payload);
       state.salesExecutive = action.payload;
     },
     setDeliveryDate: (state, action: PayloadAction<string>) => {
+      console.log("Delivery date in slice:", action.payload);
       state.deliveryDate = action.payload;
     },
     setDeliveryTime: (state, action: PayloadAction<string>) => {
+      console.log("Delivery time in slice:", action.payload);
       state.deliveryTime = action.payload;
     },
     setDeliveryAddress: (state, action: PayloadAction<string>) => {
+      console.log("Delivery address in slice:", action.payload);
       state.deliveryAddress = action.payload;
     },
     resetOrder: (state) => {
@@ -373,19 +342,19 @@ export const selectIsFormValid = createSelector(
         const cakeErrors: string[] = [];
 
         if (!cake.flavorId || cake.flavorId === 0) {
-          cakeErrors.push(`Item ${index + 1}: Flavor must be selected`);
+          cakeErrors.push(`item${index + 1}: Flavor must be selected`);
         }
 
         if (!cake.cakeShapeId) {
-          cakeErrors.push(`Item ${index + 1}: Shape must be selected`);
+          cakeErrors.push(`item${index + 1}: Shape must be selected`);
         }
 
         if (!cake.quantity || cake.quantity <= 0) {
-          cakeErrors.push(`Item ${index + 1}: Quantity must be greater than 0`);
+          cakeErrors.push(`item${index + 1}: Quantity must be greater than 0`);
         }
 
         if (cake.price <= 0) {
-          cakeErrors.push(`Item ${index + 1}: Invalid price`);
+          cakeErrors.push(`item${index + 1}: Invalid price`);
         }
 
         return cakeErrors;
@@ -395,21 +364,21 @@ export const selectIsFormValid = createSelector(
     errors.push(...cakeValidationErrors);
 
     // // Check required fields
-    // if (!deliveryDate.trim()) {
-    //   errors.push("Delivery date is required");
-    // }
+    if (!deliveryDate.trim()) {
+      errors.push("Delivery date is required");
+    }
 
-    // if (!deliveryTime.trim()) {
-    //   errors.push("Delivery time is required");
-    // }
+    if (!deliveryTime.trim()) {
+      errors.push("Delivery time is required");
+    }
 
-    // if (!deliveryAddress.trim()) {
-    //   errors.push("Delivery address is required");
-    // }
+    if (!deliveryAddress.trim()) {
+      errors.push("Delivery address is required");
+    }
 
-    // if (!salesExecutive.trim()) {
-    //   errors.push("Sales executive is required");
-    // }
+    if (!salesExecutive.trim()) {
+      errors.push("Sales executive is required");
+    }
     console.log("ERRORS", errors);
 
     return {
@@ -418,6 +387,7 @@ export const selectIsFormValid = createSelector(
     };
   }
 );
+
 export const selectIsFormValidBoolean = createSelector(
   [selectIsFormValid],
 
@@ -515,6 +485,11 @@ export const {
   removeCakeSelection,
   resetOrder,
   setAdvancePayment,
+  setDeliveryAddress,
+  setDeliveryDate,
+  setDeliveryTime,
+  setSalesExecutive,
+  setDeliveryMode,
 } = orderSlice.actions;
 
 export default orderSlice.reducer;
