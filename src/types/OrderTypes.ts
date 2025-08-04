@@ -20,6 +20,9 @@ export interface OrderData {
   shapes: Shape[];
   designs: Design[];
   advancePayment: number;
+  totalAmount: number;
+  remainingBalance: number;
+
   salesExecutive: string;
   deliveryDate: string;
   deliveryTime: string;
@@ -49,7 +52,6 @@ export interface Cake {
   inscription: string;
   notes: string;
   file: string;
-  // photoOption:PhotoOption | null
 }
 
 export interface Shape {

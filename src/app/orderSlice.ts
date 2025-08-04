@@ -321,6 +321,7 @@ export const selectIsFormValid = createSelector(
     (state: { order: OrderData }) => state.order.deliveryTime,
     (state: { order: OrderData }) => state.order.deliveryAddress,
     (state: { order: OrderData }) => state.order.salesExecutive,
+    (state: { order: OrderData }) => state.order.deliveryMode,
   ],
   (
     selectedCustomer,
@@ -328,7 +329,8 @@ export const selectIsFormValid = createSelector(
     deliveryDate,
     deliveryTime,
     deliveryAddress,
-    salesExecutive
+    salesExecutive,
+    deliveryMode
   ) => {
     // Check if customer is selected
     if (!selectedCustomer) {
@@ -378,10 +380,13 @@ export const selectIsFormValid = createSelector(
       errors.push("Delivery time is required");
     }
 
-    if (!deliveryAddress.trim()) {
+    if (deliveryMode === "home_delivery" && !deliveryAddress.trim()) {
       errors.push("Delivery address is required");
     }
 
+    // if (!deliveryAddress.trim()) {
+    //   errors.push("Delivery address is required");
+    // }
     if (!salesExecutive.trim()) {
       errors.push("Sales executive is required");
     }

@@ -126,15 +126,15 @@ function PaymentDetails() {
             {/* <Separator /> */}
             <div className="flex justify-between text-gray-700 font-medium text-lg">
               <span>Total Amount</span>
-              <p>${grandTotal}</p>
+              <p>₹{grandTotal}</p>
             </div>
             <div className="flex justify-between text-gray-600  ">
               <span>Advance Paid</span>
-              <p>{advanceAmount}</p>
+              <p>₹{advanceAmount}</p>
             </div>
             <div className="flex justify-between font-medium text-gray-900  ">
               <span>Remaining</span>
-              <p>{remainingBalance}</p>
+              <p>₹{remainingBalance}</p>
             </div>
           </div>
         </CardContent>

@@ -7,7 +7,16 @@ import { Input } from "../ui/input";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import type { Cake } from "@/types/OrderTypes";
 import { updateCake, setAdvancePayment } from "@/app/orderSlice";
-import { Camera, CameraIcon, Image, Images } from "lucide-react";
+import {
+  Camera,
+  CameraIcon,
+  Delete,
+  Image,
+  Images,
+  Plus,
+  Trash,
+  Trash2,
+} from "lucide-react";
 import { Button } from "../ui/button";
 
 interface PhotoPrintProps {
@@ -17,6 +26,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
   const [photoPrint, setPhotoPrint] = React.useState(false);
   const [photoSize, setPhotoSize] = useState("");
   const selectedCakes = useAppSelector((state) => state.order.selectedCakes);
+  const [fileName, setFileName] = useState("");
 
   const dispatch = useAppDispatch();
   const handleToggle = (option: boolean) => {
@@ -44,6 +54,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
     if (!option) {
       // When turning off photo print, reset the size selection
       setPhotoSize("");
+      setFileName("");
       const cakeIndex = selectedCakes.findIndex((c) => c.id === cake.id);
 
       dispatch(
@@ -53,6 +64,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
           changes: {
             halfPhoto: false,
             fullPhoto: false,
+            file: "",
           },
         })
       );
@@ -72,6 +84,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
 
     if (file) {
       const convertedFile = URL.createObjectURL(file);
+      setFileName(file.name);
 
       dispatch(
         updateCake({
@@ -104,6 +117,22 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
         },
       })
     );
+  };
+
+  const handleRemovePhoto = (id: number) => {
+    const cakeIndex = selectedCakes.findIndex((c) => c.id === id);
+    dispatch(
+      updateCake({
+        index: cakeIndex,
+        changes: {
+          ...{
+            file: "",
+          },
+        },
+      })
+    );
+
+    setFileName("");
   };
 
   return (
@@ -194,81 +223,52 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
               </Button>
             </div>
 
-            <div className="flex justify-between items-center">
-              <div className=" mt-3 w-1/2 space-y-3 pr-2 ">
-                <Label className=" font-semibold text-sm">Upload Photo </Label>
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileUpload(cake.id, e)}
-                  className=" w-full  mr-3"
-                  id={`photo-upload-${cake.id}`}
-                />
+            <div className="  mt-4">
+              <Label className="text-sm font-semibold text-gray-800 mb-3  flex items-center gap-2">
+                <div className="p-1 bg-rose-100 rounded">
+                  <Plus className="h-3 w-3 text-rose-600" />
+                </div>
+                Upload Your Photo (Optional)
+              </Label>
 
-                {/* <div className="relative ">
-                <Input
-                  type="file"
-                  accept="image/*"
-                  onChange={(e) => handleFileUpload(cake.id, e)}
-                  className="hidden"
-                  id={`photo-upload-${cake.id}`}
-                />
-                <label
-                  htmlFor={`photo-upload-${cake.id}`}
-                  className="flex flex-col items-center justify-center p-8 border-2 border-dashed border-rose-300 rounded-xl cursor-pointer hover:border-rose-400 hover:bg-rose-50 transition-all group"
-                >
-                  <div className="p-3 bg-rose-100 rounded-full group-hover:bg-rose-200 transition-colors mb-3">
-                    <Camera className="h-6 w-6 text-rose-600" />
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleFileUpload(cake.id, e)}
+                className="border-gray-300 focus:border-rose-500 focus:ring-rose-500"
+                id={`photo-upload-${cake.id}`}
+              />
+
+              {cake.file && (
+                <div className="mt-4 p-4 bg-white rounded-xl border border-rose-200 shadow-sm">
+                  <div className="flex items-start justify-start  gap-4">
+                    <div className="flex-shrink-0">
+                      <img
+                        src={cake.file || "/placeholder.svg"}
+                        alt="Selected photo"
+                        className="w-20 h-20 object-cover rounded-lg border-2 border-rose-200"
+                      />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-gray-800 mb-1 text-left">
+                        Selected Photo
+                      </p>
+                      <p className="text-xs text-gray-600 truncate text-left">
+                        {fileName}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1 text-left">
+                        Size: {cake.halfPhoto === true ? "Half" : "Full"} •
+                        Price: ₹{cake.halfPhoto === true ? 100 : 200}
+                      </p>
+                    </div>
+                    {/* <Trash2
+                      className="h-5 w-5 text-rose-600 ml-auto self-center mr-1"
+                      onClick={() => handleRemovePhoto(cake.id)}
+                    /> */}
                   </div>
-                  <p className="text-sm font-semibold text-gray-700 mb-1">
-                    Click to upload photo
-                  </p>
-                  <p className="text-xs text-gray-500 text-center">
-                    PNG, JPG up to 10MB
-                    <br />
-                    High resolution recommended for best quality
-                  </p>
-                </label>
-              </div> */}
-              </div>
-              <div className="mt-5 mr-8 border-2 p-0 rounded-lg border-rose-500">
-                <img
-                  src={cake.file}
-                  alt="photo_cake_image"
-                  className="h-32 w-32 rounded-lg  object-cover  "
-                />
-              </div>
+                </div>
+              )}
             </div>
-
-            {/*  */}
-            {/* <div className="mt-4 p-4 bg-green-50 rounded-xl border border-green-200">
-              <div className="flex items-center gap-3">
-                <div className="p-2 bg-green-100 rounded-full">
-                  <Camera className="h-4 w-4 text-green-600" />
-                </div>
-                <div className="flex flex-col items-start">
-                  <p className="text-sm font-semibold text-green-800">
-                    Photo uploaded successfully!
-                  </p>
-                  <p className="text-xs text-green-600">{"file_name"}</p>
-                </div>
-                <div className="text-green-600 ml-auto">
-                  <svg
-                    className="h-5 w-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       )}

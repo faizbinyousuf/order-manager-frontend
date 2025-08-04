@@ -51,10 +51,13 @@ function ItemConfiguration() {
   const grandTotal = useAppSelector(selectGrandTotal);
 
   const remainingBalance = useAppSelector(selectRemainingBalance);
-
+  const generateUniqueIntegerId = () => {
+    const maxId = cakes.reduce((maxId, cake) => Math.max(maxId, cake.id), 0);
+    return maxId + 1;
+  };
   const addNewCake = () => {
     const newCake: Cake = {
-      id: selectedCakes.length + 1,
+      id: generateUniqueIntegerId(),
       name: " ",
       cakeShapeId: null,
       selectedDesignChargeIds: [],
@@ -68,7 +71,7 @@ function ItemConfiguration() {
       price: 0,
       quantity: 0,
       flavorId: 0,
-      file: null,
+      file: "",
       // photoOption: null,
     };
 
@@ -397,7 +400,7 @@ function ItemConfiguration() {
                   Cake Total:
                 </span>
                 <span className="text-lg font-medium text-gray-900">
-                  ${calculateCakeTotal(cake).toFixed(2)}
+                  ₹{calculateCakeTotal(cake).toFixed(2)}
                 </span>
               </div>
             </div>

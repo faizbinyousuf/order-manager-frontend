@@ -2,7 +2,7 @@
 import React from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Package, Truck } from "lucide-react";
+import { Cake, Package, Truck } from "lucide-react";
 import { Label } from "../ui/label";
 import { ChevronDownIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,7 @@ import {
   setDeliveryMode,
 } from "../../app/orderSlice";
 import TimePicker from "../custom/time-picker";
+import { toast } from "sonner";
 
 function DeliveryAddress() {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
@@ -57,6 +58,7 @@ function DeliveryAddress() {
   const formValidation = useAppSelector(selectIsFormValid);
   const isFormValid = useAppSelector(selectIsFormValidBoolean);
   const deliveryMode = useAppSelector((state) => state.order.deliveryMode);
+  const state = useAppSelector((state) => state.order);
 
   const showErrors = () => {
     console.log("errors", formValidation.errors);
@@ -65,6 +67,36 @@ function DeliveryAddress() {
     });
   };
 
+  const placeOrder = () => {
+    console.log("place order", state);
+
+    toast("Order placed", {
+      dismissible: true,
+
+      style: {
+        justifyContent: "flex-start",
+        textAlign: "left",
+        background: "#C1F5C1",
+        color: "#065F46",
+      },
+      duration: 1500,
+      actionButtonStyle: {
+        background: "#065F46",
+        // color: "#C1F5C1",
+        color: "white",
+        border: "1px solid #065F46",
+        borderRadius: "5px",
+        padding: "5px 10px",
+        cursor: "pointer",
+      },
+      // description: "Sunday, December 03, 2023 at 9:00 AM",
+      action: {
+        label: "Close",
+
+        onClick: () => console.log("Close"),
+      },
+    });
+  };
   return (
     <>
       <Card className="border border-gray-200 shadow-sm">
@@ -123,7 +155,9 @@ function DeliveryAddress() {
           <div className="grid md:grid-cols-2 gap-6">
             {/* Delivery Date and Time Selector */}
             <div className="grid text-left  gap-2">
-              <Label htmlFor="date">Delivery Date</Label>
+              <Label htmlFor="date">
+                {deliveryMode === "takeaway" ? "Pickup Date" : "Delivery Date"}
+              </Label>
               <div>
                 <Popover open={openDate} onOpenChange={setOpenDate}>
                   <PopoverTrigger asChild>
@@ -162,7 +196,9 @@ function DeliveryAddress() {
               </div>
             </div>
             <div className="grid text-left  gap-2">
-              <Label htmlFor="time">Delivery Time</Label>
+              <Label htmlFor="time">
+                {deliveryMode === "takeaway" ? "Pickup Time" : "Delivery Time"}
+              </Label>
               <div>
                 <TimePicker
                   value={time}
@@ -178,25 +214,28 @@ function DeliveryAddress() {
               </div>
             </div>
           </div>
-          <div className="grid text-left  gap-2 mt-5">
-            <Label htmlFor="address">Delivery Address</Label>
-            <Textarea
-              id="deliveryAddress"
-              value={address}
-              onChange={(e) => handleDeliveryAddressSelection(e.target.value)}
-              placeholder="Enter complete delivery address"
-              rows={3}
-              // className={`border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500 ${
-              //   formValidation.errors.includes("Delivery address is required")
-              //     ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-              //     : ""
-              // }`}
-              className=" border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500"
-            />
-          </div>
+          {/*  deliveryMode === "takeaway" */}
+          {deliveryMode === "home_delivery" && (
+            <div className="grid text-left  gap-2 mt-5">
+              <Label htmlFor="address">Delivery Address</Label>
+              <Textarea
+                id="deliveryAddress"
+                value={address}
+                onChange={(e) => handleDeliveryAddressSelection(e.target.value)}
+                placeholder="Enter complete delivery address"
+                rows={3}
+                // className={`border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500 ${
+                //   formValidation.errors.includes("Delivery address is required")
+                //     ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                //     : ""
+                // }`}
+                className=" border-gray-300 rounded-sm focus:border-rose-500 focus:ring-rose-500"
+              />
+            </div>
+          )}
           <Button
             disabled={!isFormValid}
-            onClick={showErrors}
+            onClick={placeOrder}
             className={`${
               !isFormValid
                 ? "opacity-50 cursor-not-allowed w-full text-white py-3 text-base font-medium mt-5"
@@ -206,9 +245,16 @@ function DeliveryAddress() {
           >
             Submit
           </Button>
-          <p className="text-sm text-gray-600 mt-3 text-center">
-            Please fill in all required fields to submit the order
-          </p>
+          {!isFormValid && (
+            // <div className="text-red-500 mt-2">
+            //   {formValidation.errors.map((error) => (
+            //     <p key={error}>{error}</p>
+            //   ))}
+            // </div>
+            <p className="text-sm text-red-500 mt-3 text-center">
+              Please fill in all required fields to submit the order
+            </p>
+          )}
         </CardContent>
       </Card>
     </>

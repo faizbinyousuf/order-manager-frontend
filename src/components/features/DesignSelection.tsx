@@ -74,7 +74,7 @@ const DesignCard = (props: DesignCardProps) => {
         className="w-full h-20 object-cover rounded mb-3 bg-gray-100"
       />
       <h4 className="font-medium text-gray-900 text-sm">{design.name}</h4>
-      <p className="text-gray-600 text-sm">${design.price}</p>
+      <p className="text-gray-600 text-sm">₹{design.price}</p>
     </div>
   );
 };
