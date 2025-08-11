@@ -350,10 +350,10 @@ function OrderPage() {
                         {" notes here..."}
                       </p>
                     )}
-                    <div className="flex   items-center justify-between bg-yellow-200  text-xs">
+                    <div className="flex   items-center justify-between   text-xs">
                       {currentTime && (
                         <div className="flex items-center gap-1">
-                          <Palette className="h-4 w-4 text-slate-500" />
+                          <Palette className="size-4 text-slate-500" />
                           <span className="text-slate-600">
                             {"Floral Design"}
                           </span>
@@ -361,7 +361,7 @@ function OrderPage() {
                       )}
                       {currentTime && (
                         <div className="flex items-center gap-1">
-                          <Camera className="h-4 w-4 text-slate-500" />
+                          <Camera className="size-4 text-slate-500" />
                           <span className="text-slate-600">{"full"} photo</span>
                         </div>
                       )}
