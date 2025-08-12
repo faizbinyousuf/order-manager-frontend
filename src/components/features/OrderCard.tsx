@@ -30,11 +30,12 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import type { Order, Priority } from "@/types/OrderTypes";
+import { OrderStatus, type Order, type Priority } from "@/types/OrderTypes";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface OrderCardProps {
   order: Order;
-  handleUpdateOrderStatus: (orderId: number, newStatus: string) => void;
+  handleUpdateOrderStatus: (orderId: number, newStatus: OrderStatus) => void;
 }
 
 function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
@@ -88,6 +89,38 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
     });
   };
 
+  function getAvatarColor(str: string) {
+    // Simple hash function to convert string to numeric hash
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    // Map hash to Tailwind color classes
+    const colors = [
+      "bg-red-100 text-red-800", // 0
+      "bg-orange-100 text-orange-800", // 1
+      "bg-amber-100 text-amber-800", // 2
+      "bg-yellow-100 text-yellow-800", // 3
+      "bg-lime-100 text-lime-800", // 4
+      "bg-green-100 text-green-800", // 5
+      "bg-emerald-100 text-emerald-800", // 6
+      "bg-teal-100 text-teal-800", // 7
+      "bg-cyan-100 text-cyan-800", // 8
+      "bg-sky-100 text-sky-800", // 9
+      "bg-blue-100 text-blue-800", // 10
+      "bg-indigo-100 text-indigo-800", // 11
+      "bg-violet-100 text-violet-800", // 12
+      "bg-purple-100 text-purple-800", // 13
+      "bg-fuchsia-100 text-fuchsia-800", // 14
+      "bg-pink-100 text-pink-800", // 15
+    ];
+
+    // Ensure index is within array bounds
+    const index = Math.abs(hash) % colors.length;
+    return colors[index];
+  }
+
   return (
     <>
       <Card
@@ -110,7 +143,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               </div>
               <div className=" flex flex-col items-start ">
                 <p className="text-lg font-semibold text-gray-900">
-                  ORD-24015-001
+                  {order.orderNumber}
                 </p>
                 <p className="text-xs text-gray-500">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
@@ -186,18 +219,36 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               </Badge>
             </div>
             <div className="flex items-center gap-2">
-              <User className="size-4 text-xs text-slate-600" />
-              <p className="text-xs font-bold   text-slate-600">John Doe</p>
+              {/* <User className="size-4 text-xs text-slate-600" /> */}
+              <Avatar
+                className={`bg-${getAvatarColor(order.customer.id)[0]}-100`}
+              >
+                <AvatarImage
+                  //   src="https://github.com/shadcn.pngs"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>
+                  {/* {order.customer.name.charAt(0) +
+                    order.customer.name.charAt(1).toUpperCase()} */}
+                  {order.customer.name.charAt(0).toUpperCase()}
+                  {order.customer.name.split(" ")[1]?.charAt(0).toUpperCase() ??
+                    ""}
+                </AvatarFallback>
+              </Avatar>
+
+              <p className="text-xs font-bold   text-slate-600">
+                {order.customer.name}
+              </p>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-600">
               {order.deliveryMode === "takeaway" ? (
-                <Package className="h-3 w-3" />
+                <Package className="size-5" />
               ) : (
-                <Truck className="h-3 w-3" />
+                <Truck className="size-5" />
               )}
               <span>
-                {order.deliveryDate} at {/* {order.deliveryTime} */}
-                {formatTime(new Date(order.deliveryDate).toISOString())}
+                {order.deliveryDate} at {order.deliveryTime}
+                {/* {formatTime(new Date(order.deliveryTime).toISOString())} */}
               </span>
             </div>
 
@@ -248,7 +299,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                     size="sm"
                     variant="outline"
                     onClick={() =>
-                      handleUpdateOrderStatus(order.id, "rejected")
+                      handleUpdateOrderStatus(order.id, OrderStatus.REJECTED)
                     }
                     className="border-red-300 text-red-600 hover:bg-red-50"
                   >
@@ -258,7 +309,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                   <Button
                     size="sm"
                     onClick={() =>
-                      handleUpdateOrderStatus(order.id, "accepted")
+                      handleUpdateOrderStatus(order.id, OrderStatus.ACCEPTED)
                     }
                     className="bg-blue-600 hover:bg-blue-700 text-white"
                   >
@@ -282,7 +333,9 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               {order.orderStatus === "in_progress" && (
                 <Button
                   size="sm"
-                  onClick={() => handleUpdateOrderStatus(order.id, "completed")}
+                  onClick={() =>
+                    handleUpdateOrderStatus(order.id, OrderStatus.COMPLETED)
+                  }
                   className="bg-emerald-600 hover:bg-emerald-700 text-white"
                 >
                   <CircleCheck className="h-3 w-3 mr-1" />

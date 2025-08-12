@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/select";
 
 import OrderCard from "@/components/features/OrderCard";
-import { sampleOrders, type Order } from "@/types/OrderTypes";
+import { OrderStatus, sampleOrders, type Order } from "@/types/OrderTypes";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -64,14 +64,15 @@ function OrderPage() {
 
   const [orders, setOrders] = useState<Order[]>(sampleOrders);
 
-  const updateOrderStatus = (orderId: number, newStatus: string) => {
+  const updateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
+    console.log("Update order status:", orderId, newStatus);
     const updatedOrders = orders.map((order) => {
       if (order.id === orderId) {
-        return { ...order, status: newStatus };
+        return { ...order, orderStatus: newStatus };
       }
       return order;
     });
-
+    // console.log("order", updatedOrders[2]);
     setOrders(updatedOrders);
   };
 
@@ -194,74 +195,7 @@ function OrderPage() {
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="orders">
-            <Card>
-              <CardContent>
-                <div className="flex items-center  flex-col md:flex-row justify-between gap-3">
-                  <div className="flex-1 min-w-64 w-full">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                      <Input
-                        placeholder="Search orders, customers, or tags..."
-                        value={searchQuery}
-                        style={{
-                          color: "gray",
-                        }}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        className="pl-10 rounded-sm border-slate-300  focus:!ring-transparent placeholder:text-slate-400"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex  max-sm:w-full max-sm:justify-between gap-3">
-                    <Select
-                      value={statusFilter}
-                      onValueChange={setStatusFilter}
-                    >
-                      <SelectTrigger className="w-36">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Status</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="accepted">Accepted</SelectItem>
-                        <SelectItem value="in_progress">In Progress</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="rejected">Rejected</SelectItem>
-                      </SelectContent>
-                    </Select>
-
-                    <Select
-                      value={priorityFilter}
-                      onValueChange={setPriorityFilter}
-                    >
-                      <SelectTrigger className="w-36">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Priority</SelectItem>
-                        <SelectItem value="urgent">Urgent</SelectItem>
-                        <SelectItem value="normal">Normal</SelectItem>
-                        <SelectItem value="low">Low</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* Order Grids */}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-5 ">
-                  {orders.map((order) => (
-                    <OrderCard
-                      key={order.id}
-                      order={order}
-                      handleUpdateOrderStatus={updateOrderStatus}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+          <TabsContent value="overview">Overview content</TabsContent>
         </Tabs>
 
         {/* </div> */}
