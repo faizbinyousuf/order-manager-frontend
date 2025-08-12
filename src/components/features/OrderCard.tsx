@@ -118,6 +118,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
 
     // Ensure index is within array bounds
     const index = Math.abs(hash) % colors.length;
+    console.log("col", index, colors[index]);
     return colors[index];
   }
 
@@ -220,14 +221,12 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
             </div>
             <div className="flex items-center gap-2">
               {/* <User className="size-4 text-xs text-slate-600" /> */}
-              <Avatar
-                className={`bg-${getAvatarColor(order.customer.id)[0]}-100`}
-              >
+              <Avatar>
                 <AvatarImage
                   //   src="https://github.com/shadcn.pngs"
                   alt="@shadcn"
                 />
-                <AvatarFallback>
+                <AvatarFallback className={getAvatarColor(order.customer.id)}>
                   {/* {order.customer.name.charAt(0) +
                     order.customer.name.charAt(1).toUpperCase()} */}
                   {order.customer.name.charAt(0).toUpperCase()}
