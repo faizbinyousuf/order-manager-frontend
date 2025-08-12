@@ -1,6 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CakeIcon, Edit3, Plus, Settings, Trash2 } from "lucide-react";
+import {
+  Beaker,
+  CakeIcon,
+  CakeSlice,
+  Edit3,
+  Plus,
+  Settings,
+  Trash2,
+} from "lucide-react";
 import { Label } from "@/components/ui/label";
 import {
   AlertDialog,
@@ -150,30 +158,30 @@ function ItemConfiguration() {
       <Card className="border border-gray-200 shadow-sm  ">
         <CardHeader className="border-b border-gray-100 bg-white">
           <CardTitle className="flex items-center gap-3">
-            <Settings />
-            <h3>Items ({selectedCakes.length}) </h3>
+            <CakeSlice />
+            <h3>Cakes ({selectedCakes.length}) </h3>
             <Button
               onClick={addNewCake}
               variant="outline"
-              className="bg-red   ml-auto"
+              className="bg-red   ml-auto hover:border-rose-500 hover:text-rose-500"
             >
               <Plus className="h-4 w-4 mr-2" />
-              Add Item
+              Add Cake
             </Button>
           </CardTitle>
         </CardHeader>
         <CardContent>
           {selectedCakes.length === 0 && (
             <div className="w-full  flex flex-col items-center space-y-3   p-8 bg-white">
-              <CakeIcon color="#E5E7EB" className="h-10 w-10 " />
+              <CakeIcon color="#f43f5e" className="h-10 w-10 " />
               <p className="text-sm text-gray-500">No cakes added yet</p>
               <Button
                 onClick={addNewCake}
                 variant="outline"
-                className="max-w-[200px]"
+                className="hover:border-rose-500 hover:text-rose-500"
               >
                 <Plus className="h-4 w-4 mr-2" />
-                Add Your First Item
+                Add Your First Cake
               </Button>
             </div>
           )}
@@ -187,7 +195,7 @@ function ItemConfiguration() {
               <div className="flex justify-between">
                 <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2">
                   <Edit3 className="h-4 w-4 text-gray-400" />
-                  Item #{selectedCakes.indexOf(cake) + 1}
+                  Cake #{selectedCakes.indexOf(cake) + 1}
                 </h3>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>

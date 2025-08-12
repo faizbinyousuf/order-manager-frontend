@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Cake,
+  CakeSlice,
   Camera,
   CheckCircle,
   CircleCheck,
@@ -226,7 +227,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                   //   src="https://github.com/shadcn.pngs"
                   alt="@shadcn"
                 />
-                <AvatarFallback className={getAvatarColor(order.customer.id)}>
+                <AvatarFallback className={"bg-rose-100  text-sm"}>
                   {/* {order.customer.name.charAt(0) +
                     order.customer.name.charAt(1).toUpperCase()} */}
                   {order.customer.name.charAt(0).toUpperCase()}
@@ -250,46 +251,59 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                 {/* {formatTime(new Date(order.deliveryTime).toISOString())} */}
               </span>
             </div>
+            {/* <p>Cakes: {order.cakes.length}</p> */}
+            {order.cakes.map((cake, index) => {
+              const isPhotoCake =
+                cake.halfPhoto === true || cake.fullPhoto === true;
+              return (
+                <div key={index}>
+                  <div
+                    className={
+                      "p-3  rounded-lg " +
+                      (order.orderStatus === "rejected"
+                        ? " bg-slate-50"
+                        : " bg-slate-50 ")
+                    }
+                  >
+                    <div className="flex items-center justify-between mb-2">
+                      <p className="flex font-medium text-left text-sm text-slate-900">
+                        <CakeSlice className="mr-2 text-rose-500" />
+                        {cake.name}
+                      </p>
+                    </div>
+                    {cake.inscription && (
+                      <p className="text-xs text-left text-slate-600 bg-yellow-50 p-2 rounded border-l-2 border-yellow-400 mb-2">
+                        "{cake.inscription}"
+                      </p>
+                    )}
+                    {cake.notes && (
+                      <p className="text-xs text-left text-slate-600 bg-blue-50 p-2 rounded border-l-2 border-blue-400 mb-2">
+                        {cake.notes}
+                      </p>
+                    )}
+                    <div className="flex   items-center justify-between   text-xs">
+                      {cake.selectedDesignChargeIds.length != 0 && (
+                        <div className="flex items-center gap-1">
+                          <Palette className="size-4 text-slate-500" />
+                          <span className="text-slate-600">
+                            {cake.selectedDesignChargeIds}
+                          </span>
+                        </div>
+                      )}
+                      {isPhotoCake && (
+                        <div className="flex items-center gap-1">
+                          <Camera className="size-4 text-slate-500" />
+                          <span className="text-slate-600">
+                            {isPhotoCake === true ? "Full" : "Half"} Photo
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
 
-            <div
-              key={1}
-              className={
-                "p-3  rounded-lg" +
-                (order.orderStatus === "rejected"
-                  ? " bg-red-50"
-                  : " bg-slate-50")
-              }
-            >
-              <div className="flex items-center justify-between mb-2">
-                <p className="font-medium text-left text-sm text-slate-900">
-                  {1}x {"6 inch Chocolate Cake with vanilla icing "}
-                </p>
-              </div>
-              {order.createdAt && (
-                <p className="text-xs text-left text-slate-600 bg-yellow-50 p-2 rounded border-l-2 border-yellow-400 mb-2">
-                  "{"inscription here..."}"
-                </p>
-              )}
-              {order.createdAt && (
-                <p className="text-xs text-left text-slate-600 bg-blue-50 p-2 rounded border-l-2 border-blue-400 mb-2">
-                  {" notes here..."}
-                </p>
-              )}
-              <div className="flex   items-center justify-between   text-xs">
-                {order.createdAt && (
-                  <div className="flex items-center gap-1">
-                    <Palette className="size-4 text-slate-500" />
-                    <span className="text-slate-600">{"Floral Design"}</span>
-                  </div>
-                )}
-                {order.createdAt && (
-                  <div className="flex items-center gap-1">
-                    <Camera className="size-4 text-slate-500" />
-                    <span className="text-slate-600">{"full"} photo</span>
-                  </div>
-                )}
-              </div>
-            </div>
             <Separator className="my-2" />
             <div className="flex gap-2 justify-end">
               {order.orderStatus === "pending" && (

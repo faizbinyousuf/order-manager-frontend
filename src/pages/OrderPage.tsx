@@ -87,7 +87,6 @@ function OrderPage() {
                 className="text-slate-600 hover:text-slate-900"
               >
                 <ArrowLeft className="h-4 w-4 mr-2" />
-                Back to Booking
               </Button>
             </Link>
             <div className="flex items-center justify-start w-full gap-4 ml-4">
@@ -101,7 +100,8 @@ function OrderPage() {
                     month: "long",
                     day: "numeric",
                   })}
-                  • {formatTime(currentTime.toISOString())}
+                  {" • "}
+                  {formatTime(currentTime.toISOString())}
                 </p>
               </div>
               <div className="ml-auto ">
