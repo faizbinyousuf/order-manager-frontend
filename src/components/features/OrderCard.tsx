@@ -316,7 +316,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                       </p>
                     )}
                     <div className="flex   items-center justify-between   text-xs">
-                      <div>
+                      <div className="flex items-center gap-1">
                         {cake.selectedDesignChargeIds.length != 0 && (
                           <div className="flex items-center gap-1">
                             <Palette className="size-3" />
