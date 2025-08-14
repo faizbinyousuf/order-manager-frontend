@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -8,6 +9,8 @@ import {
   CircleCheck,
   CircleXIcon,
   EyeIcon,
+  ImageIcon,
+  ListOrdered,
   Package,
   Palette,
   Play,
@@ -123,11 +126,25 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
     return colors[index];
   }
 
+  const getDesignName = (designId: number): string => {
+    const designNames: Record<number, string> = {
+      1: "Floral Design",
+      2: "Birthday Special",
+      3: "Wedding Elegance",
+      4: "Kids Cartoon",
+      5: "Corporate Theme",
+      6: "Anniversary Gold",
+      7: "Baby Shower",
+      8: "Graduation Cap",
+    };
+    return designNames[designId] || `Design #${designId}`;
+  };
+
   return (
     <>
       <Card
         key={order.id}
-        className={`bg-white hover:shadow-lg transition-all duration-200 border x   py-2 px-3  ${getBorderColor(
+        className={`bg-white hover:shadow-lg transition-all duration-200 border x   py-2 px-2  ${getBorderColor(
           order.createdAt
         )} ${order.orderStatus === "rejected" ? "bg-red-50" : ""}  `}
         // className={
@@ -137,26 +154,53 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
         //     : "border-slate-200")
         // }
       >
-        <CardContent className="p-3   ">
-          <div className="flex flex-col space-y-3.5 ">
-            <div className="flex items-center gap-2">
-              <div className="p-2 size-8  bg-gradient-to-br from-rose-500 to-pink-600 rounded-md">
-                <Cake className="h-4 w-4 text-white" />
-              </div>
-              <div className=" flex flex-col items-start ">
+        <CardContent className="p-1  ">
+          <div className="flex flex-col space-y-2 ">
+            <div className="flex items-center  gap-2 ">
+              {/* <div className="  size-7  flex items-center justify-center bg-gradient-to-br from-rose-500 to-pink-600 rounded-md">
+                <ListOrdered className="size-4 text-white" />
+              </div> */}
+              <div className=" flex flex-col  items-start ">
                 <p className="text-lg font-semibold text-gray-900">
                   {order.orderNumber}
                 </p>
                 <p className="text-xs text-gray-500">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
+                    weekday: "short",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                  {/* {new Date(order.createdAt).toLocaleDateString("en-US", {
                     weekday: "long",
                     year: "numeric",
                     month: "long",
                     day: "numeric",
-                  })}
+                  })} */}
                 </p>
               </div>
-              <div className="ml-auto" id="dialog-order-detail">
+
+              {/* Status Chips */}
+
+              <div className="flex items-center  gap-1 ml-auto ">
+                <Badge
+                  className={`${getStatusColor(
+                    order.orderStatus
+                  )} border text-xs font-medium `}
+                >
+                  {order.orderStatus.replace("_", " ").toUpperCase()}
+                </Badge>
+                <Badge
+                  className={`${getPriorityColor(
+                    order.priority
+                  )} border text-xs font-medium`}
+                >
+                  {order.priority.toUpperCase()}
+                </Badge>
+              </div>
+
+              {/* Status Chips */}
+
+              <div className="mr-1" id="dialog-order-detail">
                 <Dialog>
                   <form>
                     <DialogTrigger asChild>
@@ -164,9 +208,9 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                         variant="outline"
                         size="sm"
                         // onClick={() => setSelectedOrder(order)}
-                        className="border-gray-300 hover:border-rose-500 hover:text-rose-600 rounded-sm"
+                        className="border-gray-300 hover:border-rose-500 hover:text-rose-600 rounded-sm size-7"
                       >
-                        <EyeIcon className="h-3 w-3" />
+                        <EyeIcon className="size-3" />
                       </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
@@ -206,20 +250,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                 </Dialog>
               </div>
             </div>
-            <div className="flex items-center gap-2 mb-3">
-              <Badge
-                className={`${getStatusColor(
-                  order.orderStatus
-                )} border text-xs font-medium`}
-              >
-                {order.orderStatus.replace("_", " ").toUpperCase()}
-              </Badge>
-              <Badge
-                className={`${getPriorityColor(order.priority)} border text-xs`}
-              >
-                {order.priority.toUpperCase()}
-              </Badge>
-            </div>
+
             <div className="flex items-center gap-2">
               {/* <User className="size-4 text-xs text-slate-600" /> */}
               <Avatar>
@@ -227,7 +258,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                   //   src="https://github.com/shadcn.pngs"
                   alt="@shadcn"
                 />
-                <AvatarFallback className={"bg-rose-100  text-sm"}>
+                <AvatarFallback className={"bg-rose-100  text-sm font-medium"}>
                   {/* {order.customer.name.charAt(0) +
                     order.customer.name.charAt(1).toUpperCase()} */}
                   {order.customer.name.charAt(0).toUpperCase()}
@@ -239,18 +270,19 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               <p className="text-xs font-bold   text-slate-600">
                 {order.customer.name}
               </p>
+              <div className="ml-auto flex items-center gap-2 text-xs text-slate-600">
+                {order.deliveryMode === "takeaway" ? (
+                  <Package className="size-5" />
+                ) : (
+                  <Truck className="size-5" />
+                )}
+                <span className="font-medium">
+                  {order.deliveryDate} at {order.deliveryTime}
+                  {/* {formatTime(new Date(order.deliveryTime).toISOString())} */}
+                </span>
+              </div>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-600">
-              {order.deliveryMode === "takeaway" ? (
-                <Package className="size-5" />
-              ) : (
-                <Truck className="size-5" />
-              )}
-              <span>
-                {order.deliveryDate} at {order.deliveryTime}
-                {/* {formatTime(new Date(order.deliveryTime).toISOString())} */}
-              </span>
-            </div>
+
             {/* <p>Cakes: {order.cakes.length}</p> */}
             {order.cakes.map((cake, index) => {
               const isPhotoCake =
@@ -267,34 +299,41 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                   >
                     <div className="flex items-center justify-between mb-2">
                       <p className="flex font-medium text-left text-sm text-slate-900">
-                        <CakeSlice className="mr-2 text-rose-500" />
-                        {cake.name}
+                        <CakeSlice className="mr-1 size-4 text-rose-500" />
+                        <p className="font-semibold text-sm text-slate-900">
+                          {cake.name}
+                        </p>
                       </p>
                     </div>
                     {cake.inscription && (
-                      <p className="text-xs text-left text-slate-600 bg-yellow-50 p-2 rounded border-l-2 border-yellow-400 mb-2">
+                      <p className="text-xs text-left text-slate-600 font-medium bg-yellow-50 p-2 rounded border-l-2 border-yellow-400 mb-2">
                         "{cake.inscription}"
                       </p>
                     )}
                     {cake.notes && (
-                      <p className="text-xs text-left text-slate-600 bg-blue-50 p-2 rounded border-l-2 border-blue-400 mb-2">
+                      <p className="text-xs text-left font-medium text-slate-600 bg-blue-50 p-2 rounded border-l-2 border-blue-400 mb-2">
                         {cake.notes}
                       </p>
                     )}
                     <div className="flex   items-center justify-between   text-xs">
-                      {cake.selectedDesignChargeIds.length != 0 && (
-                        <div className="flex items-center gap-1">
-                          <Palette className="size-4 text-slate-500" />
-                          <span className="text-slate-600">
-                            {cake.selectedDesignChargeIds}
-                          </span>
-                        </div>
-                      )}
+                      <div>
+                        {cake.selectedDesignChargeIds.length != 0 && (
+                          <div className="flex items-center gap-1">
+                            <Palette className="size-3" />
+                            <span className="text-slate-600  font-medium">
+                              {cake.selectedDesignChargeIds
+                                .map((id) => getDesignName(id))
+                                .join(", ")}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+
                       {isPhotoCake && (
-                        <div className="flex items-center gap-1">
-                          <Camera className="size-4 text-slate-500" />
-                          <span className="text-slate-600">
-                            {isPhotoCake === true ? "Full" : "Half"} Photo
+                        <div className="flex items-center   gap-1">
+                          <ImageIcon className="size-4 text-slate-500" />
+                          <span className="text-slate-600 font-medium">
+                            {cake.fullPhoto === true ? "Full" : "Half"} Photo
                           </span>
                         </div>
                       )}
