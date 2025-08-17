@@ -24,7 +24,13 @@ import {
 import OrderCard from "@/components/features/OrderCard";
 import { OrderStatus } from "@/types/OrderTypes";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
-import { updateOrderStatus } from "@/app/orderSlice";
+import {
+  updateOrderStatus,
+  searchOrders,
+  filterOrdersByStatusAndPriority,
+  fetchOrdersThunk,
+  updateOrderStatusThunk,
+} from "@/app/orderSlice";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -66,26 +72,56 @@ function OrderPage() {
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const allOrders = useAppSelector((state) => state.order.orders);
+  const { loading, error } = useAppSelector((state) => state.order);
+
+  useEffect(() => {
+    dispatch(fetchOrdersThunk());
+  }, [dispatch]);
 
   // const [orders, setOrders] = useState<Order[]>(state.order.orders);
   const handleSearch = (query: string) => {
     setSearchQuery(query);
+    dispatch(searchOrders(query));
+  };
+
+  const handleStatusFilter = (filter: string) => {
+    setStatusFilter(filter);
+    console.log("filter", filter, priorityFilter);
+    dispatch(
+      filterOrdersByStatusAndPriority({
+        status: filter,
+        priority: priorityFilter,
+      })
+    );
+  };
+
+  const handlePriorityFilter = (filter: string) => {
+    console.log("handlePriorityFilter", statusFilter, filter);
+    setPriorityFilter(filter);
+    dispatch(
+      filterOrdersByStatusAndPriority({
+        status: statusFilter,
+        priority: filter,
+      })
+    );
   };
 
   const handleUpdateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
     console.log("Update order status:", orderId, newStatus);
-    // const updatedOrders = orders.map((order) => {
-    //   if (order.id === orderId) {
-    //     return { ...order, orderStatus: newStatus };
-    //   }
-    //   return order;
-    // });
-    // // console.log("order", updatedOrders[2]);
-    // setOrders(updatedOrders);
-
-    dispatch(updateOrderStatus({ id: orderId, status: newStatus }));
+    dispatch(updateOrderStatusThunk({ id: orderId, status: newStatus }));
   };
-
+  if (loading)
+    return (
+      <div className="    flex items-center justify-center w-full min-h-screen">
+        Loading orders...
+      </div>
+    );
+  if (error)
+    return (
+      <div className=" flex items-center justify-center w-full min-h-screen">
+        Error: {error.toString()}
+      </div>
+    );
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="max-w-7xl mx-auto  ">
@@ -115,7 +151,11 @@ function OrderPage() {
                 </p>
               </div>
               <div className="ml-auto ">
-                <Button className="rounded-sm " variant="outline">
+                <Button
+                  className="rounded-sm "
+                  variant="outline"
+                  onClick={() => dispatch(fetchOrdersThunk())}
+                >
                   <RefreshCcw className="size-4 text-slate-600 hover:text-slate-900 mr-2" />
                   Refresh
                 </Button>
@@ -159,7 +199,7 @@ function OrderPage() {
                   <div className="flex  max-sm:w-full max-sm:justify-between gap-3">
                     <Select
                       value={statusFilter}
-                      onValueChange={setStatusFilter}
+                      onValueChange={handleStatusFilter}
                     >
                       <SelectTrigger className="w-36">
                         <SelectValue />
@@ -176,7 +216,7 @@ function OrderPage() {
 
                     <Select
                       value={priorityFilter}
-                      onValueChange={setPriorityFilter}
+                      onValueChange={handlePriorityFilter}
                     >
                       <SelectTrigger className="w-36">
                         <SelectValue />
@@ -186,6 +226,8 @@ function OrderPage() {
                         <SelectItem value="urgent">Urgent</SelectItem>
                         <SelectItem value="normal">Normal</SelectItem>
                         <SelectItem value="low">Low</SelectItem>
+                        <SelectItem value="medium">Medium</SelectItem>
+                        <SelectItem value="high">High</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>

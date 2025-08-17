@@ -70,6 +70,10 @@ export interface OrderData {
   deliveryMode: DeliveryMode;
 
   orders: Order[];
+  orderBackup: Order[];
+
+  loading: boolean;
+  error: string | null;
 }
 
 export interface Design {
