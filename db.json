@@ -352,7 +352,7 @@
       "remainingBalance": 0,
       "paymentStatus": "paid",
       "paymentMode": "UPI",
-      "orderStatus": "pending",
+      "orderStatus": "in_progress",
       "priority": "medium",
       "salesExecutive": "Malik",
       "createdAt": "2023-12-15T09:45:00Z",

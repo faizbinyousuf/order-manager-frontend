@@ -377,12 +377,12 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrdersThunk.pending, (state) => {
-        console.log("payload  in fetchOrdersThunk pending:");
+        // console.log("payload  in fetchOrdersThunk pending:");
         state.loading = true;
         state.error = null;
       })
       .addCase(fetchOrdersThunk.fulfilled, (state, action) => {
-        console.log("payload  in fetchOrdersThunk fulfilled:", action.payload);
+        // console.log("payload  in fetchOrdersThunk fulfilled:", action.payload);
         state.loading = false;
         state.orders = action.payload;
         state.orderBackup = action.payload;
@@ -401,13 +401,12 @@ export const orderSlice = createSlice({
       })
       .addCase(updateOrderStatusThunk.fulfilled, (state, action) => {
         console.log("payload  in updateOrderStatusThunk fulfilled:", action);
-
-        const { id, orderStatus } = action.payload;
+        const updatedOrder = action.payload;
         state.orders = state.orders.map((order) =>
-          order.id === id ? { ...order, orderStatus: orderStatus } : order
+          order.id === updatedOrder.id ? updatedOrder : order
         );
         state.orderBackup = state.orderBackup.map((order) =>
-          order.id === id ? { ...order, orderStatus: orderStatus } : order
+          order.id === updatedOrder.id ? updatedOrder : order
         );
       })
       .addCase(updateOrderStatusThunk.rejected, (state, action) => {
@@ -445,12 +444,12 @@ export const updateOrderStatusThunk = createAsyncThunk(
   "updateStatus",
   async (
     { id, status }: { id: number; status: OrderStatus },
-    { rejectWithValue, dispatch }
+    { rejectWithValue }
   ) => {
     try {
       // In a real app, you would call your API here
       const response = await updateOrder(id, { orderStatus: status });
-      dispatch(updateOrderStatus({ id, status }));
+
       return response;
     } catch (error: unknown) {
       const message =
