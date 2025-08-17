@@ -246,8 +246,8 @@ function ItemConfiguration() {
                       handleFlavorSelection(index, value)
                     }
                   >
-                    <SelectTrigger className="w-full">
-                      <SelectValue placeholder="Select a variant" />
+                    <SelectTrigger className="w-full ">
+                      <SelectValue placeholder="Select a variant " />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectGroup>

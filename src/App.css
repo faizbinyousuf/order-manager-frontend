@@ -5,6 +5,9 @@
   text-align: center; */
   font-family: "Montserrat", sans-serif;
 }
+html{
+    font-family: "Montserrat", sans-serif;
+}
 
 .logo {
   height: 6em;

@@ -22,10 +22,14 @@ import {
 } from "@/components/ui/select";
 
 import OrderCard from "@/components/features/OrderCard";
-import { OrderStatus, sampleOrders, type Order } from "@/types/OrderTypes";
+import { OrderStatus } from "@/types/OrderTypes";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { updateOrderStatus } from "@/app/orderSlice";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const updateTime = () => {
@@ -61,19 +65,25 @@ function OrderPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const allOrders = useAppSelector((state) => state.order.orders);
 
-  const [orders, setOrders] = useState<Order[]>(sampleOrders);
+  // const [orders, setOrders] = useState<Order[]>(state.order.orders);
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+  };
 
-  const updateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
+  const handleUpdateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
     console.log("Update order status:", orderId, newStatus);
-    const updatedOrders = orders.map((order) => {
-      if (order.id === orderId) {
-        return { ...order, orderStatus: newStatus };
-      }
-      return order;
-    });
-    // console.log("order", updatedOrders[2]);
-    setOrders(updatedOrders);
+    // const updatedOrders = orders.map((order) => {
+    //   if (order.id === orderId) {
+    //     return { ...order, orderStatus: newStatus };
+    //   }
+    //   return order;
+    // });
+    // // console.log("order", updatedOrders[2]);
+    // setOrders(updatedOrders);
+
+    dispatch(updateOrderStatus({ id: orderId, status: newStatus }));
   };
 
   return (
@@ -135,12 +145,12 @@ function OrderPage() {
                     <div className="relative">
                       <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
                       <Input
-                        placeholder="Search orders, customers, or tags..."
+                        placeholder="Search orders, customers"
                         value={searchQuery}
                         style={{
                           color: "gray",
                         }}
-                        onChange={(e) => setSearchQuery(e.target.value)}
+                        onChange={(e) => handleSearch(e.target.value)}
                         className="pl-10 rounded-sm border-slate-300  focus:!ring-transparent placeholder:text-slate-400"
                       />
                     </div>
@@ -184,11 +194,11 @@ function OrderPage() {
                 {/* Order Grids */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-5 ">
-                  {orders.map((order) => (
+                  {allOrders.map((order) => (
                     <OrderCard
                       key={order.id}
                       order={order}
-                      handleUpdateOrderStatus={updateOrderStatus}
+                      handleUpdateOrderStatus={handleUpdateOrderStatus}
                     />
                   ))}
                 </div>

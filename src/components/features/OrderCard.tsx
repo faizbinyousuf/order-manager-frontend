@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Bike,
   Cake,
   CakeSlice,
   Camera,
@@ -70,6 +71,8 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
       case "completed":
         return "bg-green-100 text-green-800 border-green-200";
       case "rejected":
+        return "bg-red-100 text-red-800 border-red-200";
+      case "cancelled":
         return "bg-red-100 text-red-800 border-red-200";
       default:
         return "bg-gray-100 text-gray-800 border-gray-200";
@@ -146,7 +149,11 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
         key={order.id}
         className={`bg-white hover:shadow-lg transition-all duration-200 border x   py-2 px-2  ${getBorderColor(
           order.createdAt
-        )} ${order.orderStatus === "rejected" ? "bg-red-50" : ""}  `}
+        )} ${
+          order.orderStatus === "rejected" || order.orderStatus === "cancelled"
+            ? "bg-red-50"
+            : ""
+        }  `}
         // className={
         //   "bg-white hover:shadow-lg transition-all duration-200 border py-2 px-3 " +
         //   (order.status === "rejected"
@@ -162,7 +169,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               </div> */}
               <div className=" flex flex-col  items-start ">
                 <p className="text-lg font-semibold text-gray-900">
-                  {order.orderNumber}
+                  #{order.orderNumber}
                 </p>
                 <p className="text-xs text-gray-500">
                   {new Date(order.createdAt).toLocaleDateString("en-US", {
@@ -185,17 +192,19 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                 <Badge
                   className={`${getStatusColor(
                     order.orderStatus
-                  )} border text-xs font-medium `}
+                  )} border  text-xs font-medium `}
                 >
                   {order.orderStatus.replace("_", " ").toUpperCase()}
                 </Badge>
-                <Badge
-                  className={`${getPriorityColor(
-                    order.priority
-                  )} border text-xs font-medium`}
-                >
-                  {order.priority.toUpperCase()}
-                </Badge>
+                {order.priority === "urgent" && (
+                  <Badge
+                    className={`${getPriorityColor(
+                      order.priority
+                    )} border text-xs font-medium`}
+                  >
+                    {order.priority.toUpperCase()}
+                  </Badge>
+                )}
               </div>
 
               {/* Status Chips */}
@@ -208,7 +217,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                         variant="outline"
                         size="sm"
                         // onClick={() => setSelectedOrder(order)}
-                        className="border-gray-300 hover:border-rose-500 hover:text-rose-600 rounded-sm size-7"
+                        className="border-gray-300 hover:border-rose-500 hover:text-rose-600 rounded-full size-7"
                       >
                         <EyeIcon className="size-3" />
                       </Button>
@@ -253,28 +262,27 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
 
             <div className="flex items-center gap-2">
               {/* <User className="size-4 text-xs text-slate-600" /> */}
-              <Avatar>
+              {/* <Avatar>
                 <AvatarImage
-                  //   src="https://github.com/shadcn.pngs"
+                  
                   alt="@shadcn"
                 />
                 <AvatarFallback className={"bg-rose-100  text-sm font-medium"}>
-                  {/* {order.customer.name.charAt(0) +
-                    order.customer.name.charAt(1).toUpperCase()} */}
+                  
                   {order.customer.name.charAt(0).toUpperCase()}
                   {order.customer.name.split(" ")[1]?.charAt(0).toUpperCase() ??
                     ""}
                 </AvatarFallback>
-              </Avatar>
+              </Avatar> */}
 
-              <p className="text-xs font-bold   text-slate-600">
+              <p className="text-xs font-bold   text-slate-600  max-w-28">
                 {order.customer.name}
               </p>
               <div className="ml-auto flex items-center gap-2 text-xs text-slate-600">
                 {order.deliveryMode === "takeaway" ? (
-                  <Package className="size-5" />
+                  <Package className="size-4 shrink-0" />
                 ) : (
-                  <Truck className="size-5" />
+                  <Truck className="size-4 shrink-0" />
                 )}
                 <span className="font-medium">
                   {order.deliveryDate} at {order.deliveryTime}
@@ -291,36 +299,37 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                 <div key={index}>
                   <div
                     className={
-                      "p-3  rounded-lg " +
-                      (order.orderStatus === "rejected"
-                        ? " bg-slate-50"
-                        : " bg-slate-50 ")
+                      "p-2  rounded-sm border" +
+                      (order.orderStatus === "rejected" ||
+                      order.orderStatus === "cancelled"
+                        ? " bg-transparent"
+                        : " bg-white ")
                     }
                   >
-                    <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center justify-start mb-2">
                       <p className="flex font-medium text-left text-sm text-slate-900">
-                        <CakeSlice className="mr-1 size-4 text-rose-500" />
-                        <p className="font-semibold text-sm text-slate-900">
-                          {cake.name}
-                        </p>
+                        <CakeSlice className="mr-1 size-4 text-rose-700" />
+                      </p>
+                      <p className="font-semibold text-sm text-slate-900">
+                        {cake.name} - {cake.quantity}Kg
                       </p>
                     </div>
                     {cake.inscription && (
-                      <p className="text-xs text-left text-slate-600 font-medium bg-yellow-50 p-2 rounded border-l-2 border-yellow-400 mb-2">
+                      <p className="text-xs text-left text-slate-600 font-medium bg-[#f3f7fd] p-2 rounded-r-sm border-l-3 border-[#5095d5] mb-2">
                         "{cake.inscription}"
                       </p>
                     )}
                     {cake.notes && (
-                      <p className="text-xs text-left font-medium text-slate-600 bg-blue-50 p-2 rounded border-l-2 border-blue-400 mb-2">
+                      <p className="text-xs text-left font-medium text-slate-600 bg-[#fbf5f4] p-2 rounded-r-sm border-l-3 border-[#d5857a] mb-2">
                         {cake.notes}
                       </p>
                     )}
-                    <div className="flex   items-center justify-between   text-xs">
+                    <div className="flex   items-center justify-between text-xs">
                       <div className="flex items-center gap-1">
                         {cake.selectedDesignChargeIds.length != 0 && (
                           <div className="flex items-center gap-1">
-                            <Palette className="size-3" />
-                            <span className="text-slate-600  font-medium">
+                            <Palette className="size-3 shrink-0  text-rose-700" />
+                            <span className=" text-slate-600  font-medium">
                               {cake.selectedDesignChargeIds
                                 .map((id) => getDesignName(id))
                                 .join(", ")}
@@ -333,7 +342,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                         <div className="flex items-center   gap-1">
                           <ImageIcon className="size-4 text-slate-500" />
                           <span className="text-slate-600 font-medium">
-                            {cake.fullPhoto === true ? "Full" : "Half"} Photo
+                            {cake.fullPhoto === true ? "Full" : "Half"}
                           </span>
                         </div>
                       )}
@@ -343,7 +352,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               );
             })}
 
-            <Separator className="my-2" />
+            {/* <Separator className="my-2" /> */}
             <div className="flex gap-2 justify-end">
               {order.orderStatus === "pending" && (
                 <>
