@@ -31,10 +31,8 @@ import {
   updateOrderStatus,
   searchOrders,
   filterOrdersByStatusAndPriority,
-  initializeOrders,
-  updateStatus,
-  // fetchOrdersThunk,
-  // updateOrderStatusThunk,
+  fetchOrdersThunk,
+  updateOrderStatusThunk,
 } from "@/app/orderSlice";
 import { useSelector } from "react-redux";
 
@@ -43,7 +41,7 @@ function OrderPage() {
 
   const dispatch = useAppDispatch();
   useEffect(() => {
-    dispatch(initializeOrders());
+    dispatch(fetchOrdersThunk());
   }, []);
 
   useEffect(() => {
@@ -113,15 +111,11 @@ function OrderPage() {
     );
   };
 
-  const handleUpdateOrderStatus = async (
-    orderId: number,
-    newStatus: OrderStatus
-  ) => {
-    dispatch(updateStatus({ id: orderId, status: newStatus }));
-    // await dispatch(updateOrderStatusThunk({ id: orderId, status: newStatus }));
-    // dispatch(fetchOrdersThunk());
-    // setTimeout(() => dispatch(fetchOrdersThunk()), 500); // Wait 500ms before fetching
+  // Update order status
+  const handleStatusUpdate = (id: number, status: any) => {
+    dispatch(updateOrderStatusThunk({ id, status }));
   };
+
   if (error)
     return (
       <div className=" flex items-center justify-center w-full min-h-screen">
@@ -263,7 +257,7 @@ function OrderPage() {
                     <OrderCard
                       key={order.id}
                       order={order}
-                      handleUpdateOrderStatus={handleUpdateOrderStatus}
+                      handleUpdateOrderStatus={handleStatusUpdate}
                     />
                   ))}
                 </div>

@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 
 import {
+  createOrderThunk,
+  selectGrandTotal,
   selectIsFormValid,
   selectIsFormValidBoolean,
   // selectIsFormValidBoolean,
@@ -60,42 +62,57 @@ function DeliveryAddress() {
   const deliveryMode = useAppSelector((state) => state.order.deliveryMode);
   const state = useAppSelector((state) => state.order);
 
-  const showErrors = () => {
-    console.log("errors", formValidation.errors);
-    formValidation.errors.forEach((error) => {
-      console.log("errors", error);
-    });
-  };
+  const grandTotal = useAppSelector(selectGrandTotal);
 
-  const placeOrder = () => {
+  const placeOrder = async () => {
     console.log("place order", state);
+    if (!formValidation.isValid) {
+      // Show validation errors
+      alert(
+        `Please fix the following errors:\n${formValidation.errors.join("\n")}`
+      );
+      return;
+    }
 
-    toast("Order placed", {
-      dismissible: true,
+    try {
+      // Dispatch the createOrder thunk - it will automatically get data from Redux state
+      const result = await dispatch(createOrderThunk()).unwrap();
 
-      style: {
-        justifyContent: "flex-start",
-        textAlign: "left",
-        background: "#C1F5C1",
-        color: "#065F46",
-      },
-      duration: 1500,
-      actionButtonStyle: {
-        background: "#065F46",
-        // color: "#C1F5C1",
-        color: "white",
-        border: "1px solid #065F46",
-        borderRadius: "5px",
-        padding: "5px 10px",
-        cursor: "pointer",
-      },
-      // description: "Sunday, December 03, 2023 at 9:00 AM",
-      action: {
-        label: "Close",
+      // Success handling
+      alert(`Order created successfully! Order ID: ${result.orderNumber}`);
+      // Optionally redirect to orders list or order details
+      // navigate('/orders');
+    } catch (error) {
+      // Error is already handled in the slice, but you can add additional UI feedback
+      alert(`Failed to create order: ${error}`);
+    }
 
-        onClick: () => console.log("Close"),
-      },
-    });
+    // toast("Order placed", {
+    //   dismissible: true,
+
+    //   style: {
+    //     justifyContent: "flex-start",
+    //     textAlign: "left",
+    //     background: "#C1F5C1",
+    //     color: "#065F46",
+    //   },
+    //   duration: 1500,
+    //   actionButtonStyle: {
+    //     background: "#065F46",
+    //     // color: "#C1F5C1",
+    //     color: "white",
+    //     border: "1px solid #065F46",
+    //     borderRadius: "5px",
+    //     padding: "5px 10px",
+    //     cursor: "pointer",
+    //   },
+    //   // description: "Sunday, December 03, 2023 at 9:00 AM",
+    //   action: {
+    //     label: "Close",
+
+    //     onClick: () => console.log("Close"),
+    //   },
+    // });
   };
   return (
     <>
@@ -243,7 +260,7 @@ function DeliveryAddress() {
             }`}
             // className="w-full bg-rose-600 hover:bg-rose-700 text-white py-3 text-base font-medium mt-5"
           >
-            Submit
+            Create Order
           </Button>
           {!isFormValid && (
             // <div className="text-red-500 mt-2">

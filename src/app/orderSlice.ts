@@ -330,7 +330,7 @@ export const orderSlice = createSlice({
       action: PayloadAction<{ id: number; order: Order }>
     ) => {
       console.log("order status update XXX", action.payload);
-      debugger;
+
       // const ord = state.orders.find((order) => order.id === action.payload.id);
       // console.log("order status update YYY", ord);
       // state.orders = state.orders.map((order) =>
@@ -364,13 +364,21 @@ export const orderSlice = createSlice({
       action: PayloadAction<{ status: string; priority: string }>
     ) => {
       const { status, priority } = action.payload;
+
+      // If both filters are "all", show all orders
       if (status === "all" && priority === "all") {
         state.orders = state.orderBackup;
         return;
       }
-      state.orders = state.orderBackup.filter(
-        (order) => order.orderStatus === status && order.priority === priority
-      );
+
+      // Filter based on the selected criteria
+      state.orders = state.orderBackup.filter((order) => {
+        const statusMatch = status === "all" || order.orderStatus === status;
+        const priorityMatch = priority === "all" || order.priority === priority;
+
+        // Both conditions must be true (if a filter is not "all", it must match)
+        return statusMatch && priorityMatch;
+      });
     },
 
     resetOrder: (state) => {
@@ -386,35 +394,147 @@ export const orderSlice = createSlice({
       state.deliveryAddress = "";
     },
   },
+  extraReducers: (builder) => {
+    // Handle fetchOrders
+    builder
+      .addCase(fetchOrdersThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOrdersThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders = action.payload;
+        state.orderBackup = action.payload;
+        state.error = null;
+      })
+      .addCase(fetchOrdersThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Handle updateOrderStatus
+      .addCase(updateOrderStatusThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateOrderStatusThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        const { id, order } = action.payload;
+        // Update the order in both orders and orderBackup arrays
+        state.orders = state.orders.map((existingOrder) =>
+          existingOrder.id === id ? order : existingOrder
+        );
+        state.orderBackup = state.orderBackup.map((existingOrder) =>
+          existingOrder.id === id ? order : existingOrder
+        );
+        state.error = null;
+      })
+      .addCase(updateOrderStatusThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+
+      // Handle createOrder
+      .addCase(createOrderThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createOrderThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.orders.push(action.payload);
+        state.orderBackup.push(action.payload);
+        state.error = null;
+      })
+      .addCase(createOrderThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+  },
 });
 
-//The principle here is the same: first, an asynchronous operation is executed,
-// after which the action changing the state of the store is dispatched. (From FSO Lesson 6 - Redux Toolkit )
-export const updateStatus = ({
-  id,
-  status,
-}: {
-  id: number;
-  status: OrderStatus;
-}) => {
-  return async (dispatch: any) => {
-    // calling async operation first
-    const updatedOrder = await orderService.updateOrder(id, {
-      orderStatus: status,
-    });
-    //changing the state of the store
-    dispatch(updateOrderStatus({ id, order: updatedOrder }));
-  };
-};
+// Async thunks.........
 
-export const initializeOrders = () => {
-  return async (dispatch: any) => {
-    const ord = await orderService.fetchOrders();
-    //  debugger;
-    dispatch(setOrders(ord));
-  };
-};
+export const fetchOrdersThunk = createAsyncThunk(
+  "order/fetchOrders",
+  async (_, { rejectWithValue }) => {
+    try {
+      const orders = await orderService.fetchOrders();
+      return orders;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to fetch orders");
+    }
+  }
+);
 
+// Async thunk for updating order status
+export const updateOrderStatusThunk = createAsyncThunk(
+  "order/updateOrderStatus",
+  async (
+    { id, status }: { id: number; status: OrderStatus },
+    { rejectWithValue }
+  ) => {
+    try {
+      const updatedOrder = await orderService.updateOrder(id, {
+        orderStatus: status,
+      });
+      return { id, order: updatedOrder };
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to update order status");
+    }
+  }
+);
+
+// Async thunk for creating a new order
+export const createOrderThunk = createAsyncThunk(
+  "order/createOrder",
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState() as { order: OrderData };
+      const orderState = state.order;
+
+      // Validate form before creating order
+      const validation = selectIsFormValid(state);
+      if (!validation.isValid) {
+        return rejectWithValue(
+          `Validation failed: ${validation.errors.join(", ")}`
+        );
+      }
+
+      // Calculate totals
+      const grandTotal = selectGrandTotal(state);
+      const remainingBalance = selectRemainingBalance(state);
+
+      // Prepare order data from Redux state
+      const orderData: Omit<Order, "id"> = {
+        customer: orderState.selectedCustomer!,
+        cakes: orderState.selectedCakes,
+        deliveryDate: orderState.deliveryDate,
+        deliveryTime: orderState.deliveryTime,
+        deliveryAddress: orderState.deliveryAddress,
+        deliveryMode: orderState.deliveryMode,
+        salesExecutive: orderState.salesExecutive,
+        advancePayment: orderState.advancePayment,
+        totalAmount: grandTotal,
+        remainingBalance: remainingBalance,
+        paymentStatus: "paid",
+        paymentMode: "cash",
+        notes: "",
+        updatedAt: new Date().toISOString(),
+        orderStatus: OrderStatus.PENDING, // Default status
+        priority: "normal", // Default priority
+        orderNumber: `ORD-${Date.now()}`, // Generate order number
+        createdAt: new Date().toISOString(),
+      };
+
+      const newOrder = await orderService.createOrder(orderData);
+      return newOrder;
+    } catch (error: any) {
+      return rejectWithValue(error.message || "Failed to create order");
+    }
+  }
+);
+
+// Async thunks end here.......
 // Selector to check if the order form is valid
 export const selectIsFormValid = createSelector(
   [

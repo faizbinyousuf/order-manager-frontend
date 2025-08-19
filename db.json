@@ -146,7 +146,7 @@
       "remainingBalance": 1400,
       "paymentStatus": "partial",
       "paymentMode": "card",
-      "orderStatus": "pending",
+      "orderStatus": "completed",
       "priority": "urgent",
       "salesExecutive": "Priya Patel",
       "createdAt": "2023-12-21T16:20:00Z",
@@ -191,7 +191,7 @@
       "remainingBalance": 1100,
       "paymentStatus": "pending",
       "paymentMode": "cash",
-      "orderStatus": "pending",
+      "orderStatus": "in_progress",
       "priority": "low",
       "salesExecutive": "Rajiv Khanna",
       "createdAt": "2023-12-17T11:10:00Z",
@@ -251,7 +251,7 @@
       "remainingBalance": 0,
       "paymentStatus": "paid",
       "paymentMode": "UPI",
-      "orderStatus": "pending",
+      "orderStatus": "rejected",
       "priority": "medium",
       "salesExecutive": "Amit Singh",
       "createdAt": "2023-12-15T09:45:00Z",
@@ -352,7 +352,7 @@
       "remainingBalance": 0,
       "paymentStatus": "paid",
       "paymentMode": "UPI",
-      "orderStatus": "pending",
+      "orderStatus": "accepted",
       "priority": "medium",
       "salesExecutive": "Malik",
       "createdAt": "2023-12-15T09:45:00Z",
@@ -416,6 +416,52 @@
       "salesExecutive": "Malik",
       "createdAt": "2023-12-15T09:45:00Z",
       "updatedAt": "2023-12-22T17:30:00Z"
+    },
+    {
+      "id": "c427",
+      "customer": {
+        "id": "2",
+        "name": "Sarah Johnson",
+        "phone": "+1234567891",
+        "email": "sarah@example.com"
+      },
+      "cakes": [
+        {
+          "id": 7,
+          "name": "Chocolate",
+          "cakeShapeId": 1,
+          "selectedDesignChargeIds": [
+            1
+          ],
+          "additionalDesign": "",
+          "customDesignCharge": 0,
+          "inscription": "Happy Anniversary",
+          "notes": "Eggless",
+          "searchCode": null,
+          "halfPhoto": false,
+          "fullPhoto": true,
+          "price": 650,
+          "quantity": 1,
+          "flavorId": 2,
+          "file": "blob:http://localhost:5173/9e714ad9-2622-4c03-91e1-db4aed4e702b"
+        }
+      ],
+      "deliveryDate": "Sun Aug 10 2025 00:00:00 GMT+0400 (Gulf Standard Time)",
+      "deliveryTime": "1:00 AM",
+      "deliveryAddress": "",
+      "deliveryMode": "takeaway",
+      "salesExecutive": "Alice Cooper",
+      "advancePayment": 500,
+      "totalAmount": 875,
+      "remainingBalance": 375,
+      "paymentStatus": "paid",
+      "paymentMode": "cash",
+      "notes": "",
+      "updatedAt": "2025-08-19T19:45:21.980Z",
+      "orderStatus": "pending",
+      "priority": "normal",
+      "orderNumber": "ORD-1755632721980",
+      "createdAt": "2025-08-19T19:45:21.980Z"
     }
   ]
 }

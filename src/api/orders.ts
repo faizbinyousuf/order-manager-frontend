@@ -23,9 +23,9 @@ const fetchOrderById = async (id: number): Promise<Order> => {
   }
 };
 
-const createOrder = async (order: Order): Promise<Order> => {
+const createOrder = async (order: Omit<Order, "id">): Promise<Order> => {
   try {
-    const response = await apiClient.post("/orders", order);
+    const response = await apiClient.post("/", order);
     return response.data;
   } catch (error) {
     console.error("Error creating order:", error);
