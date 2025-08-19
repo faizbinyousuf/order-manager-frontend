@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   DeliveryMode,
   OrderStatus,
@@ -16,7 +18,7 @@ import {
   type PayloadAction,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import { fetchOrders, updateOrder } from "@/api/orders";
+import orderService from "@/api/orders";
 
 const customers = [
   {
@@ -237,6 +239,12 @@ export const orderSlice = createSlice({
   name: "order",
   initialState: initialState,
   reducers: {
+    setOrders: (state, action) => {
+      state.orders = action.payload;
+      state.orderBackup = action.payload;
+      //debugger;
+      // return action.payload;
+    },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
@@ -293,10 +301,6 @@ export const orderSlice = createSlice({
       console.log("Current all in slice:", current(state.selectedCakes));
     },
 
-    setOrders: (state, action: PayloadAction<Order[]>) => {
-      state.orders = action.payload;
-      state.orderBackup = action.payload;
-    },
     setAdvancePayment: (state, action: PayloadAction<number>) => {
       state.advancePayment = action.payload;
     },
@@ -323,14 +327,22 @@ export const orderSlice = createSlice({
     },
     updateOrderStatus: (
       state,
-      action: PayloadAction<{ id: number; status: OrderStatus }>
+      action: PayloadAction<{ id: number; order: Order }>
     ) => {
-      console.log("order status update", action.payload);
-      const { id, status } = action.payload;
-      state.orders = state.orders.map((order) =>
-        order.id === id ? { ...order, orderStatus: status } : order
-      );
+      console.log("order status update XXX", action.payload);
+      debugger;
+      // const ord = state.orders.find((order) => order.id === action.payload.id);
+      // console.log("order status update YYY", ord);
+      // state.orders = state.orders.map((order) =>
+      //   order.id === action.payload.id ? action.payload.order : order
+      // );
+
+      // const { id, status } = action.payload;
+      // state.orders = state.orders.map((order) =>
+      //   order.id === id ? { ..., order,  } : order
+      // );
     },
+
     searchOrders: (state, action: PayloadAction<string>) => {
       const term = action.payload.toLowerCase();
       if (!term || term === "") {
@@ -374,94 +386,34 @@ export const orderSlice = createSlice({
       state.deliveryAddress = "";
     },
   },
-  extraReducers: (builder) => {
-    builder
-      .addCase(fetchOrdersThunk.pending, (state) => {
-        // console.log("payload  in fetchOrdersThunk pending:");
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(fetchOrdersThunk.fulfilled, (state, action) => {
-        // console.log("payload  in fetchOrdersThunk fulfilled:", action.payload);
-        state.loading = false;
-        state.orders = action.payload;
-        state.orderBackup = action.payload;
-      })
-      .addCase(fetchOrdersThunk.rejected, (state, action) => {
-        console.log("payload  in fetchOrdersThunk rejected:", action.payload);
-        state.loading = false;
-        state.error = action.payload as string;
-      })
-      //// update extra reducers
-      .addCase(updateOrderStatusThunk.pending, (state) => {
-        state.loading = false;
-        state.error = null;
-
-        console.log("payload  in updateOrderStatusThunk pending:");
-      })
-      .addCase(updateOrderStatusThunk.fulfilled, (state, action) => {
-        console.log("payload  in updateOrderStatusThunk fulfilled:", action);
-        const updatedOrder = action.payload;
-        state.orders = state.orders.map((order) =>
-          order.id === updatedOrder.id ? updatedOrder : order
-        );
-        state.orderBackup = state.orderBackup.map((order) =>
-          order.id === updatedOrder.id ? updatedOrder : order
-        );
-      })
-      .addCase(updateOrderStatusThunk.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload as string;
-      });
-  },
 });
 
-/////////////////////////// Thunks /////////////////////////
+//The principle here is the same: first, an asynchronous operation is executed,
+// after which the action changing the state of the store is dispatched. (From FSO Lesson 6 - Redux Toolkit )
+export const updateStatus = ({
+  id,
+  status,
+}: {
+  id: number;
+  status: OrderStatus;
+}) => {
+  return async (dispatch: any) => {
+    // calling async operation first
+    const updatedOrder = await orderService.updateOrder(id, {
+      orderStatus: status,
+    });
+    //changing the state of the store
+    dispatch(updateOrderStatus({ id, order: updatedOrder }));
+  };
+};
 
-export const fetchOrdersThunk = createAsyncThunk(
-  "fetchAll",
-  async (_, { rejectWithValue }) => {
-    try {
-      return await fetchOrders();
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-
-    // try {
-    //   dispatch(setLoading(true));
-    //   const orders = await fetchOrders();
-    //   dispatch(setOrders(orders));
-    //   dispatch(setLoading(false));
-    // } catch (error: unknown) {
-    //   dispatch(setLoading(false));
-    //   console.log("Thunk error:", error);
-    //   return rejectWithValue(error.message);
-    // }
-  }
-);
-
-export const updateOrderStatusThunk = createAsyncThunk(
-  "updateStatus",
-  async (
-    { id, status }: { id: number; status: OrderStatus },
-    { rejectWithValue }
-  ) => {
-    try {
-      // In a real app, you would call your API here
-      const response = await updateOrder(id, { orderStatus: status });
-
-      return response;
-    } catch (error: unknown) {
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to update order status";
-      return rejectWithValue(message);
-    }
-  }
-);
-
-////////////// Thunks Ends //////////////
+export const initializeOrders = () => {
+  return async (dispatch: any) => {
+    const ord = await orderService.fetchOrders();
+    //  debugger;
+    dispatch(setOrders(ord));
+  };
+};
 
 // Selector to check if the order form is valid
 export const selectIsFormValid = createSelector(
@@ -657,7 +609,6 @@ export const {
   setError,
   setLoading,
   setOrders,
-
   filterOrdersByStatusAndPriority,
 } = orderSlice.actions;
 

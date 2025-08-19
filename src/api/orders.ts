@@ -1,7 +1,7 @@
 import type { Order } from "@/types/OrderTypes";
 import apiClient from "./client";
 
-export const fetchOrders = async (): Promise<Order[]> => {
+const fetchOrders = async (): Promise<Order[]> => {
   try {
     // add 2 second delay
     await new Promise((resolve) => setTimeout(resolve, 1200));
@@ -13,7 +13,7 @@ export const fetchOrders = async (): Promise<Order[]> => {
   }
 };
 
-export const fetchOrderById = async (id: number): Promise<Order> => {
+const fetchOrderById = async (id: number): Promise<Order> => {
   try {
     const response = await apiClient.get(`/orders/${id}`);
     return response.data;
@@ -23,7 +23,7 @@ export const fetchOrderById = async (id: number): Promise<Order> => {
   }
 };
 
-export const createOrder = async (order: Order): Promise<Order> => {
+const createOrder = async (order: Order): Promise<Order> => {
   try {
     const response = await apiClient.post("/orders", order);
     return response.data;
@@ -33,7 +33,7 @@ export const createOrder = async (order: Order): Promise<Order> => {
   }
 };
 
-export const updateOrder = async (
+const updateOrder = async (
   id: number,
   order: Partial<Order>
 ): Promise<Order> => {
@@ -46,11 +46,19 @@ export const updateOrder = async (
   }
 };
 
-export const deleteOrder = async (id: number): Promise<void> => {
+const deleteOrder = async (id: number): Promise<void> => {
   try {
     await apiClient.delete(`/orders/${id}`);
   } catch (error) {
     console.error(`Error deleting order ${id}:`, error);
     throw error;
   }
+};
+
+export default {
+  fetchOrders,
+  fetchOrderById,
+  createOrder,
+  updateOrder,
+  deleteOrder,
 };

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -6,6 +8,7 @@ import {
   Bell,
   ChefHatIcon,
   ClipboardListIcon,
+  Loader,
   RefreshCcw,
   Search,
 } from "lucide-react";
@@ -22,20 +25,26 @@ import {
 } from "@/components/ui/select";
 
 import OrderCard from "@/components/features/OrderCard";
-import { OrderStatus } from "@/types/OrderTypes";
+import { OrderStatus, type Order } from "@/types/OrderTypes";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import {
   updateOrderStatus,
   searchOrders,
   filterOrdersByStatusAndPriority,
-  fetchOrdersThunk,
-  updateOrderStatusThunk,
+  initializeOrders,
+  updateStatus,
+  // fetchOrdersThunk,
+  // updateOrderStatusThunk,
 } from "@/app/orderSlice";
+import { useSelector } from "react-redux";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
 
   const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(initializeOrders());
+  }, []);
 
   useEffect(() => {
     const updateTime = () => {
@@ -71,12 +80,10 @@ function OrderPage() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const allOrders = useAppSelector((state) => state.order.orders);
+  // const allOrders = useAppSelector((state) => state.order.orders);
+  const allOrders = useSelector((state: any) => state.order.orders);
+  //debugger;
   const { loading, error } = useAppSelector((state) => state.order);
-
-  useEffect(() => {
-    dispatch(fetchOrdersThunk());
-  }, [dispatch]);
 
   // const [orders, setOrders] = useState<Order[]>(state.order.orders);
   const handleSearch = (query: string) => {
@@ -106,16 +113,15 @@ function OrderPage() {
     );
   };
 
-  const handleUpdateOrderStatus = (orderId: number, newStatus: OrderStatus) => {
-    console.log("Update order status:", orderId, newStatus);
-    dispatch(updateOrderStatusThunk({ id: orderId, status: newStatus }));
+  const handleUpdateOrderStatus = async (
+    orderId: number,
+    newStatus: OrderStatus
+  ) => {
+    dispatch(updateStatus({ id: orderId, status: newStatus }));
+    // await dispatch(updateOrderStatusThunk({ id: orderId, status: newStatus }));
+    // dispatch(fetchOrdersThunk());
+    // setTimeout(() => dispatch(fetchOrdersThunk()), 500); // Wait 500ms before fetching
   };
-  if (loading)
-    return (
-      <div className="    flex items-center justify-center w-full min-h-screen">
-        Loading orders...
-      </div>
-    );
   if (error)
     return (
       <div className=" flex items-center justify-center w-full min-h-screen">
@@ -123,7 +129,24 @@ function OrderPage() {
       </div>
     );
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 relative ">
+      {loading && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-transparent bg-opacity-10 "
+          style={{
+            // Block all pointer events
+            pointerEvents: "auto",
+            // Prevent text selection
+            userSelect: "none",
+            // Disable touch actions
+            touchAction: "none",
+          }}
+        >
+          <div className="p-6 bg-white bg-opacity-80 rounded-lg shadow-lg">
+            <Loader className="h-12 w-12 animate-spin text-rose-500" />
+          </div>
+        </div>
+      )}
       <div className="max-w-7xl mx-auto  ">
         <Card className="rounded-none shadow-none ">
           <CardContent className="flex items-center">
@@ -154,7 +177,7 @@ function OrderPage() {
                 <Button
                   className="rounded-sm "
                   variant="outline"
-                  onClick={() => dispatch(fetchOrdersThunk())}
+                  onClick={() => console.log("Refresh")}
                 >
                   <RefreshCcw className="size-4 text-slate-600 hover:text-slate-900 mr-2" />
                   Refresh
@@ -236,7 +259,7 @@ function OrderPage() {
                 {/* Order Grids */}
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-5 ">
-                  {allOrders.map((order) => (
+                  {allOrders.map((order: Order) => (
                     <OrderCard
                       key={order.id}
                       order={order}

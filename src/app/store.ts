@@ -5,6 +5,8 @@ const store = configureStore({
   reducer: {
     order: orderReducer,
   },
+
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
 export type RootState = ReturnType<typeof store.getState>;
