@@ -78,7 +78,7 @@ function ItemConfiguration() {
       fullPhoto: false,
       price: 0,
       quantity: 0,
-      flavorId: 0,
+      cakeId: 0,
       file: "",
       // photoOption: null,
     };
@@ -124,7 +124,7 @@ function ItemConfiguration() {
     console.log(" id", id);
 
     updateCakeProperty(index, {
-      flavorId: parseInt(id),
+      cakeId: parseInt(id),
       price: cakes.find((c) => c.id === parseInt(id))?.price || 0,
       name: cakes.find((c) => c.id === parseInt(id))?.name || "",
       quantity: 1,
@@ -240,8 +240,8 @@ function ItemConfiguration() {
                   </Label>
                   <Select
                     key={cake.id}
-                    // value={cake.flavorId?.toString() || ""}
-                    value={cake.flavorId ? cake.flavorId.toString() : undefined}
+                    // value={cake.cakeId?.toString() || ""}
+                    value={cake.cakeId ? cake.cakeId.toString() : undefined}
                     onValueChange={(value) =>
                       handleFlavorSelection(index, value)
                     }

@@ -7,16 +7,7 @@ import { Input } from "../ui/input";
 import { useAppSelector, useAppDispatch } from "@/app/hooks";
 import type { Cake } from "@/types/OrderTypes";
 import { updateCake, setAdvancePayment } from "@/app/orderSlice";
-import {
-  Camera,
-  CameraIcon,
-  Delete,
-  Image,
-  Images,
-  Plus,
-  Trash,
-  Trash2,
-} from "lucide-react";
+import { CameraIcon, Image, Images, Plus } from "lucide-react";
 import { Button } from "../ui/button";
 
 interface PhotoPrintProps {
@@ -31,7 +22,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
   const dispatch = useAppDispatch();
   const handleToggle = (option: boolean) => {
     console.log(selectedCakes);
-    if (selectedCakes[0].flavorId === 0) {
+    if (selectedCakes[0].cakeId === 0) {
       toast("Please select cake Flavor", {
         dismissible: true,
         // description: "Sunday, December 03, 2023 at 9:00 AM",

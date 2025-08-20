@@ -20,207 +20,15 @@ import {
 } from "@reduxjs/toolkit";
 import orderService from "@/api/orders";
 
-const customers = [
-  {
-    id: "1",
-    name: "John Smith",
-    phone: "+1234567890",
-    email: "john@example.com",
-  },
-  {
-    id: "2",
-    name: "Sarah Johnson",
-    phone: "+1234567891",
-    email: "sarah@example.com",
-  },
-  {
-    id: "3",
-    name: "Mike Davis",
-    phone: "+1234567892",
-    email: "mike@example.com",
-  },
-];
-const designs: Design[] = [
-  {
-    id: 1,
-    name: "Floral Pattern",
-    price: 25,
-    image: "https://picsum.photos/200/100",
-  },
-  {
-    id: 2,
-    name: "Geometric Pattern",
-    price: 30,
-    image: "https://picsum.photos/200/100",
-  },
-  {
-    id: 3,
-    name: "Abstract Pattern",
-    price: 20,
-    image: "https://picsum.photos/200/100",
-  },
-  {
-    id: 4,
-    name: "Floral Pattern",
-    price: 25,
-    image: "https://picsum.photos/200/100",
-  },
-  {
-    id: 5,
-    name: "Geometric Pattern",
-    price: 30,
-    image: "https://picsum.photos/200/100",
-  },
-  {
-    id: 6,
-    name: "Abstract Pattern",
-    price: 20,
-    image: "https://picsum.photos/200/100",
-  },
-];
-const flavors: Cake[] = [
-  {
-    id: 1,
-    name: "Vanilla",
-    price: 600,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-  {
-    id: 2,
-    name: "Chocolate",
-    price: 650,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-  {
-    id: 3,
-    name: "Strawberry",
-    price: 700,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-  {
-    id: 4,
-    name: "Lemon",
-    price: 750,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-  {
-    id: 5,
-    name: "Mint",
-    price: 800,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-  {
-    id: 6,
-    name: "Raspberry",
-    price: 850,
-    searchCode: null,
-    quantity: 1,
-    flavorId: 0,
-    halfPhoto: false,
-    fullPhoto: false,
-    cakeShapeId: null,
-    selectedDesignChargeIds: [],
-    additionalDesign: "",
-    customDesignCharge: 0,
-    inscription: "",
-    notes: "",
-    file: "",
-    //photoOption: null,
-  },
-];
-
-const shapes: Shape[] = [
-  {
-    id: 1,
-    name: "Heart",
-  },
-  {
-    id: 2,
-    name: "Square",
-  },
-  {
-    id: 3,
-    name: "Circle",
-  },
-  {
-    id: 4,
-    name: "Rectangle",
-  },
-  {
-    id: 5,
-    name: "Custom",
-  },
-];
-
 ///sample data
 
 const initialState: OrderData = {
   selectedCustomer: null,
-  customers: customers,
-  cakes: flavors,
+  customers: [],
+  cakes: [],
   selectedCakes: [],
-  designs: designs,
-  shapes: shapes,
+  designs: [],
+  shapes: [],
   advancePayment: 0,
   salesExecutive: "",
   deliveryDate: "",
@@ -315,7 +123,10 @@ export const orderSlice = createSlice({
     },
     setDeliveryDate: (state, action: PayloadAction<string>) => {
       console.log("Delivery date in slice:", action.payload);
-      state.deliveryDate = action.payload;
+
+      const formattedDate = convertDateFormat(action.payload);
+      state.deliveryDate = formattedDate;
+      console.log("Converted date:", formattedDate);
     },
     setDeliveryTime: (state, action: PayloadAction<string>) => {
       console.log("Delivery time in slice:", action.payload);
@@ -452,6 +263,16 @@ export const orderSlice = createSlice({
   },
 });
 
+function convertDateFormat(dateString: string): string {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
+}
+
 // Async thunks.........
 
 export const fetchOrdersThunk = createAsyncThunk(
@@ -518,11 +339,12 @@ export const createOrderThunk = createAsyncThunk(
         remainingBalance: remainingBalance,
         paymentStatus: "paid",
         paymentMode: "cash",
+
         notes: "",
         updatedAt: new Date().toISOString(),
         orderStatus: OrderStatus.PENDING, // Default status
         priority: "normal", // Default priority
-        orderNumber: `ORD-${Date.now()}`, // Generate order number
+        orderNumber: await generateOrderNumber(),
         createdAt: new Date().toISOString(),
       };
 
@@ -534,7 +356,15 @@ export const createOrderThunk = createAsyncThunk(
   }
 );
 
-// Async thunks end here.......
+const generateOrderNumber = async () => {
+  // const state = getState() as { order: OrderData };
+  const orders = await orderService.fetchOrders();
+
+  const lastOrder = orders[orders.length - 1];
+  const orderNumberAsNumber = parseInt(lastOrder.orderNumber);
+  return (orderNumberAsNumber + 1).toString();
+};
+
 // Selector to check if the order form is valid
 export const selectIsFormValid = createSelector(
   [
@@ -572,7 +402,7 @@ export const selectIsFormValid = createSelector(
       .map((cake, index) => {
         const cakeErrors: string[] = [];
 
-        if (!cake.flavorId || cake.flavorId === 0) {
+        if (!cake.cakeId || cake.cakeId === 0) {
           cakeErrors.push(`item${index + 1}: Flavor must be selected`);
         }
 
@@ -707,7 +537,10 @@ export const selectRemainingBalance = createSelector(
   ],
   (grandTotal, advancePayment) => grandTotal - advancePayment
 );
-
+const allOrders = createSelector(
+  (state: { order: OrderData }) => state.order.orders,
+  (orders) => orders
+);
 export const {
   setCustomer,
   setCakes,
