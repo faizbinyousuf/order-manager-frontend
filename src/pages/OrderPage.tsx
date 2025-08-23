@@ -146,6 +146,7 @@ function OrderPage() {
           <CardContent className="flex items-center">
             <Link to="/">
               <Button
+                type="button"
                 variant="ghost"
                 className="text-slate-600 hover:text-slate-900"
               >
@@ -169,6 +170,7 @@ function OrderPage() {
               </div>
               <div className="ml-auto ">
                 <Button
+                  type="button"
                   className="rounded-sm "
                   variant="outline"
                   onClick={() => console.log("Refresh")}

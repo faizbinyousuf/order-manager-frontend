@@ -162,6 +162,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
 
             <div className="flex justify-between w-full  gap-4   mt-3">
               <Button
+                type="button"
                 onClick={() => handleSizeChange("half")}
                 variant={"link"}
                 className={`hover:no-underline flex-1 relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-24 text-left flex flex-col items-start shadow-none hover:shadow-none ${
@@ -188,6 +189,7 @@ function PhotoPrint({ cake }: PhotoPrintProps) {
               </Button>
 
               <Button
+                type="button"
                 onClick={() => handleSizeChange("full")}
                 variant={"link"}
                 className={` flex-1  relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md hover:no-underline min-h-24 text-left flex flex-col items-start ${

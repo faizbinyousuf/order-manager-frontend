@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import Layout from "./pages/Layout";
 import OrderPage from "./pages/OrderPage";
+import React from "react";
 
 const router = createBrowserRouter([
   {
@@ -25,7 +26,10 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <RouterProvider router={router} />
+      <React.StrictMode>
+        <RouterProvider router={router} />
+      </React.StrictMode>
+
       {/* <HomePage></HomePage> */}
       {/* <Toaster position="top-center" /> */}
     </>

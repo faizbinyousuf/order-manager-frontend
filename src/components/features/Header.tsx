@@ -14,6 +14,7 @@ function Header() {
           <div className=" flex ml-auto">
             <Link to="/orders">
               <Button
+                type="button"
                 variant="outline"
                 className="rounded-sm border-rose-300 text-rose-600 hover:bg-rose-50 hover:border-rose-400 bg-transparent"
               >

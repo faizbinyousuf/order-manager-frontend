@@ -18,7 +18,6 @@ import {
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
 
 import {
   Dialog,
@@ -33,31 +32,50 @@ import { Input } from "../ui/input";
 // import { useSelector, useDispatch } from "react-redux";
 import { useAppSelector, useAppDispatch } from "../../app/hooks";
 
-import { addCustomer, setCustomer } from "../../app/orderSlice";
+import {
+  addCustomer,
+  createCustomerNormal,
+  createCustomerThunk,
+  setCustomer,
+} from "../../app/orderSlice";
 import type { Customer } from "@/types/OrderTypes";
+import { useEffect, useState } from "react";
 
 function CustomerDetails() {
-  const [open, setOpen] = React.useState(false);
-  const [openDialog, setOpenDialog] = React.useState(false);
+  // useEffect(() => {
+  //   const beforeUnloadHandler = (e: BeforeUnloadEvent) => {
+  //     console.log("🚨 Page reload attempt detected!");
+  //     e.preventDefault();
+  //     e.returnValue = "";
+  //   };
+  //   window.addEventListener("beforeunload", beforeUnloadHandler);
+  //   return () =>
+  //     window.removeEventListener("beforeunload", beforeUnloadHandler);
+  // }, []);
 
-  const [value, setValue] = React.useState("");
+  const [open, setOpen] = useState(false);
+  const [openDialog, setOpenDialog] = useState(false);
+
   const dispatch = useAppDispatch();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
 
-  // const selectedCustomer = useAppSelector(
-  //   (state) => state.order.selectedCustomer
-  // );
+  const selectedCustomer = useAppSelector(
+    (state) => state.order.selectedCustomer
+  );
 
   const customers = useAppSelector((state) => state.order.customers);
 
+  // debugger;
+
   const handleCustomerChange = (value: Customer) => {
+    setOpen(false);
     dispatch(setCustomer(value));
   };
 
-  const handleAddCustomer = () => {
-    console.log(name + phone + email);
+  const handleAddCustomer = async (event: React.FormEvent) => {
+    event.preventDefault();
 
     const customer: Customer = {
       id: Date.now().toString(),
@@ -70,6 +88,8 @@ function CustomerDetails() {
     setEmail("");
     setOpenDialog(false);
     dispatch(addCustomer(customer));
+
+    dispatch(createCustomerThunk(customer));
   };
 
   return (
@@ -95,14 +115,18 @@ function CustomerDetails() {
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
+                    type="button"
                     role="combobox"
                     aria-expanded={open}
                     className="w-full justify-between"
                   >
-                    {value
+                    {selectedCustomer
+                      ? selectedCustomer.name
+                      : "Select customer"}
+                    {/* {value
                       ? customers.find((customer) => customer.name === value)
                           ?.name
-                      : "Select customer..."}
+                      : "Select customer..."} */}
                     <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                   </Button>
                 </PopoverTrigger>
@@ -117,17 +141,17 @@ function CustomerDetails() {
                             key={customer.id}
                             value={customer.name}
                             onSelect={(currentValue) => {
-                              setValue(
-                                currentValue === value ? "" : currentValue
-                              );
-                              setOpen(false);
+                              // setValue(
+                              //   currentValue === value ? "" : currentValue
+                              // );
+
                               handleCustomerChange(customer);
                             }}
                           >
                             <CheckIcon
                               className={cn(
                                 "mr-2 h-4 w-4",
-                                value === customer.name
+                                selectedCustomer?.name === customer.name
                                   ? "opacity-100"
                                   : "opacity-0"
                               )}
@@ -146,13 +170,17 @@ function CustomerDetails() {
               <DialogTrigger asChild>
                 <Button
                   variant="outline"
+                  type="button"
                   className="bg-transparent w-full sm:w-auto sm:mt-0"
                 >
                   <Plus className="h-4 w-4 mr-2" />
                   Add New
                 </Button>
               </DialogTrigger>
-              <DialogContent className="w-[95vw] max-w-md">
+              <DialogContent
+                onInteractOutside={(e) => e.preventDefault()}
+                className="w-[95vw] max-w-md"
+              >
                 <DialogDescription className="sr-only">
                   Add a new customer to the order
                 </DialogDescription>
@@ -190,6 +218,7 @@ function CustomerDetails() {
                     />
                   </div>
                   <Button
+                    type="button"
                     disabled={name.trim().length < 3 || phone.trim().length < 8}
                     className="   w-full"
                     onClick={handleAddCustomer}

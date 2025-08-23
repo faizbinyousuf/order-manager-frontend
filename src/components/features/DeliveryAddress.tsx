@@ -126,6 +126,7 @@ function DeliveryAddress() {
         <CardContent>
           <div className="grid grid-cols-2 gap-4 mb-6">
             <Button
+              type="button"
               onClick={() => dispatch(setDeliveryMode("takeaway"))}
               variant={"link"}
               className={`hover:no-underline  relative p-4 rounded-lg border-2 cursor-pointer transition-all  min-h-18 text-left flex flex-col items-start shadow-none hover:shadow-none ${
@@ -149,6 +150,7 @@ function DeliveryAddress() {
             <Button
               onClick={() => dispatch(setDeliveryMode("home_delivery"))}
               variant={"link"}
+              type="button"
               className={`hover:no-underline relative p-4 rounded-lg border-2 cursor-pointer transition-all hover:shadow-md min-h-18 text-left flex flex-col items-start ${
                 deliveryMode === "home_delivery"
                   ? "border-rose-500 bg-rose-50 shadow-sm"
@@ -179,6 +181,7 @@ function DeliveryAddress() {
                 <Popover open={openDate} onOpenChange={setOpenDate}>
                   <PopoverTrigger asChild>
                     <Button
+                      type="button"
                       variant="outline"
                       id="date"
                       className="w-full rounded-sm justify-between font-normal"
@@ -251,6 +254,7 @@ function DeliveryAddress() {
             </div>
           )}
           <Button
+            type="button"
             disabled={!isFormValid}
             onClick={placeOrder}
             className={`${

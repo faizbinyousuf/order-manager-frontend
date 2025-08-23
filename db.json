@@ -1,4 +1,416 @@
 {
+  "salesExecutives": [
+    {
+      "id": "1",
+      "name": "Malik"
+    },
+    {
+      "id": "2",
+      "name": "Abu"
+    },
+    {
+      "id": "3",
+      "name": "Arfas"
+    }
+  ],
+  "customers": [
+    {
+      "id": "1",
+      "name": "John Smith",
+      "phone": "+1234567890",
+      "email": "john@example.com"
+    },
+    {
+      "id": "2",
+      "name": "Sarah Johnson",
+      "phone": "+1234567891",
+      "email": "sarah@example.com"
+    },
+    {
+      "id": "3",
+      "name": "Mike Davis",
+      "phone": "+1234567892",
+      "email": "mike@example.com"
+    },
+    {
+      "id": "1755894945108",
+      "name": "Faiz Bin Yusuf",
+      "phone": "98970123",
+      "email": ""
+    },
+    {
+      "id": "1755895011944",
+      "name": "Fathima Shameer",
+      "phone": "9567654906",
+      "email": ""
+    },
+    {
+      "id": "1755895070723",
+      "name": "dadad",
+      "phone": "12345678",
+      "email": ""
+    },
+    {
+      "id": "1755895346672",
+      "name": "Net",
+      "phone": "12345678901",
+      "email": ""
+    },
+    {
+      "id": "1755895514385",
+      "name": "New 1",
+      "phone": "112233445",
+      "email": ""
+    },
+    {
+      "id": "1755896010021",
+      "name": "New 4",
+      "phone": "44556677",
+      "email": ""
+    },
+    {
+      "id": "1755896146301",
+      "name": "Ne6",
+      "phone": "9988776655",
+      "email": ""
+    },
+    {
+      "id": "1755942257986",
+      "name": "New Test",
+      "phone": "78639873",
+      "email": "email@test.com"
+    },
+    {
+      "id": "1755942282981",
+      "name": "dwdf",
+      "phone": "fdsfdsfgrdfgrdg",
+      "email": ""
+    },
+    {
+      "id": "1755942927896",
+      "name": "AGain test",
+      "phone": "2434565465",
+      "email": ""
+    },
+    {
+      "id": "1755942993601",
+      "name": "slice etst",
+      "phone": "e3ir5y4t5",
+      "email": ""
+    },
+    {
+      "id": "1755943177411",
+      "name": "ttttttt",
+      "phone": "111111114557",
+      "email": ""
+    },
+    {
+      "id": "1755947970096",
+      "name": "uuuu",
+      "phone": "9884343454",
+      "email": ""
+    },
+    {
+      "id": "1755948042490",
+      "name": "vvvv",
+      "phone": "8877827482",
+      "email": ""
+    },
+    {
+      "id": "1755948831794",
+      "name": "zzzz",
+      "phone": "112224346687",
+      "email": ""
+    },
+    {
+      "id": "1755949068948",
+      "name": "rtsrtsrts",
+      "phone": "76878797",
+      "email": ""
+    },
+    {
+      "id": "1755949164042",
+      "name": "iojriefgregf",
+      "phone": "87598475694876",
+      "email": ""
+    },
+    {
+      "id": "1755949299632",
+      "name": "yhjehrfj",
+      "phone": "908974824",
+      "email": ""
+    },
+    {
+      "id": "1755950205888",
+      "name": "tytghfb",
+      "phone": "09099887",
+      "email": ""
+    },
+    {
+      "id": "1755950297511",
+      "name": "skdheslfje",
+      "phone": "97156789",
+      "email": ""
+    },
+    {
+      "id": "1755953618878",
+      "name": "dsdsfs",
+      "phone": "4545464646",
+      "email": ""
+    },
+    {
+      "id": "1755953657451",
+      "name": "ferfefg",
+      "phone": "56565656",
+      "email": ""
+    },
+    {
+      "id": "1755953699066",
+      "name": "sumesh Kavippada",
+      "phone": "908767567",
+      "email": ""
+    },
+    {
+      "id": "1755953883249",
+      "name": "fsdfesdf",
+      "phone": "354657699",
+      "email": ""
+    },
+    {
+      "id": "1755953958827",
+      "name": "dsdsds",
+      "phone": "77876985",
+      "email": ""
+    },
+    {
+      "id": "1755954253380",
+      "name": "ddggdegd",
+      "phone": "0009987655",
+      "email": ""
+    },
+    {
+      "id": "1755954442072",
+      "name": "gdfrgfdhgf",
+      "phone": "555555555",
+      "email": ""
+    },
+    {
+      "id": "1755954574135",
+      "name": "jfgjyghjkm",
+      "phone": "456567687989",
+      "email": ""
+    },
+    {
+      "id": "1755954806737",
+      "name": "dsdsd",
+      "phone": "4454645464",
+      "email": ""
+    },
+    {
+      "id": "1755954860489",
+      "name": "fdfrtryh",
+      "phone": "7878787878",
+      "email": ""
+    },
+    {
+      "id": "1755954983516",
+      "name": "drere",
+      "phone": "56565656",
+      "email": ""
+    },
+    {
+      "id": "1755955228640",
+      "name": "adfesrdftghj",
+      "phone": "545677678",
+      "email": ""
+    },
+    {
+      "id": "1755955643000",
+      "name": "dssd",
+      "phone": "45678765r4ew",
+      "email": ""
+    },
+    {
+      "id": "1755955685347",
+      "name": "wertyui",
+      "phone": "987654322q34567",
+      "email": ""
+    },
+    {
+      "id": "1755955792218",
+      "name": "wretyre",
+      "phone": "5676543354567",
+      "email": ""
+    },
+    {
+      "id": "1755956099408",
+      "name": "wewerwr",
+      "phone": "45657876765w",
+      "email": ""
+    },
+    {
+      "id": "1755957636351",
+      "name": "bidadssm",
+      "phone": "1234567543",
+      "email": ""
+    },
+    {
+      "id": "1755957661622",
+      "name": "wfrwrwr",
+      "phone": "4354546erwr",
+      "email": ""
+    },
+    {
+      "id": "1755957812687",
+      "name": "etetete",
+      "phone": "5656565656565",
+      "email": ""
+    },
+    {
+      "id": "1755957932073",
+      "name": "test onen ",
+      "phone": "678679790",
+      "email": ""
+    },
+    {
+      "id": "1755958000504",
+      "name": "gfdgfdg",
+      "phone": "45454544545",
+      "email": ""
+    },
+    {
+      "id": "1755958043559",
+      "name": "rererer",
+      "phone": "43434343434",
+      "email": ""
+    },
+    {
+      "id": "1755958356930",
+      "name": "new test one",
+      "phone": "25465676879",
+      "email": ""
+    },
+    {
+      "id": "1755958560481",
+      "name": "dsdfsf",
+      "phone": "232323232",
+      "email": ""
+    },
+    {
+      "id": "1755958722020",
+      "name": "FAFAFAFA",
+      "phone": "3543535353",
+      "email": ""
+    },
+    {
+      "id": "1755958740706",
+      "name": "dwdwdw",
+      "phone": "ZAZAZAZAZ",
+      "email": ""
+    },
+    {
+      "id": "1755974987536",
+      "name": "dwasfas",
+      "phone": "8765467654",
+      "email": ""
+    },
+    {
+      "id": "1755975271168",
+      "name": "safadad",
+      "phone": "1234121212",
+      "email": ""
+    }
+  ],
+  "cakes": [
+    {
+      "id": "1",
+      "name": "Vanilla"
+    },
+    {
+      "id": "2",
+      "name": "Chocolate Truffle"
+    },
+    {
+      "id": "3",
+      "name": "Butterscotch"
+    },
+    {
+      "id": "4",
+      "name": "Lemon"
+    },
+    {
+      "id": "5",
+      "name": "Cheesecake"
+    },
+    {
+      "id": "6",
+      "name": "Raspberry"
+    },
+    {
+      "id": "7",
+      "name": "Mango Vanilla"
+    }
+  ],
+  "shapes": [
+    {
+      "id": "1",
+      "name": "Circle"
+    },
+    {
+      "id": "2",
+      "name": "Rectangle"
+    },
+    {
+      "id": "3",
+      "name": "Square"
+    },
+    {
+      "id": "4",
+      "name": "Heart"
+    },
+    {
+      "id": "5",
+      "name": "Custom"
+    }
+  ],
+  "designs": [
+    {
+      "id": "1",
+      "name": "Floral",
+      "price": 100,
+      "image": "https://picsum.photos/200/300"
+    },
+    {
+      "id": "2",
+      "name": "Printed",
+      "price": 200,
+      "image": "https://picsum.photos/200/300"
+    },
+    {
+      "id": "3",
+      "name": "Mickey Mouse",
+      "price": 300,
+      "image": "https://picsum.photos/200/300"
+    },
+    {
+      "id": "4",
+      "name": "Tom and Jerry",
+      "price": 400,
+      "image": "https://picsum.photos/200/300"
+    },
+    {
+      "id": "5",
+      "name": "Wedding Special",
+      "price": 500,
+      "image": "https://picsum.photos/200/300"
+    },
+    {
+      "id": "6",
+      "name": "Cartoon",
+      "price": 600,
+      "image": "https://picsum.photos/200/300"
+    }
+  ],
   "data": [
     {
       "id": "1",
@@ -20,7 +432,10 @@
           "fullPhoto": true,
           "cakeId": 1,
           "cakeShapeId": 2,
-          "selectedDesignChargeIds": [1, 3],
+          "selectedDesignChargeIds": [
+            1,
+            3
+          ],
           "additionalDesign": "Birthday Theme",
           "customDesignCharge": 300,
           "inscription": "Happy Birthday Riya!",
@@ -63,7 +478,9 @@
           "fullPhoto": false,
           "cakeId": 2,
           "cakeShapeId": 1,
-          "selectedDesignChargeIds": [2],
+          "selectedDesignChargeIds": [
+            2
+          ],
           "additionalDesign": "Anniversary",
           "customDesignCharge": 200,
           "inscription": "Happy Anniversary",
@@ -105,7 +522,9 @@
           "fullPhoto": false,
           "cakeId": 3,
           "cakeShapeId": 3,
-          "selectedDesignChargeIds": [5],
+          "selectedDesignChargeIds": [
+            5
+          ],
           "additionalDesign": "Graduation",
           "customDesignCharge": 500,
           "inscription": "Congratulations Dr. Reddy!",
@@ -165,7 +584,9 @@
           "fullPhoto": true,
           "cakeId": 5,
           "cakeShapeId": 2,
-          "selectedDesignChargeIds": [4],
+          "selectedDesignChargeIds": [
+            4
+          ],
           "additionalDesign": "",
           "customDesignCharge": 0,
           "inscription": "Happy Retirement!",

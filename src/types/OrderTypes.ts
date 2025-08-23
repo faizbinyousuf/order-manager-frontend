@@ -64,6 +64,7 @@ export interface OrderData {
   remainingBalance: number;
 
   salesExecutive: string;
+  salesExecutives: string[];
   deliveryDate: string;
   deliveryTime: string;
   deliveryAddress: string;
@@ -74,6 +75,7 @@ export interface OrderData {
 
   loading: boolean;
   error: string | null;
+  initialDataFetched: boolean;
 }
 
 export interface Design {

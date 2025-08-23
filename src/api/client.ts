@@ -3,7 +3,7 @@ import axios from "axios";
 import type { AxiosInstance } from "axios"; // Type-only import
 
 const apiClient: AxiosInstance = axios.create({
-  baseURL: "http://localhost:3000/data", // json-server default port
+  baseURL: "http://localhost:3000/", // json-server default port
   headers: {
     "Content-Type": "application/json",
   },

@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Cake, Customer, Design, Order } from "@/types/OrderTypes";
+import type { Cake, Customer, Design, Order, Shape } from "@/types/OrderTypes";
 import apiClient from "./client";
+import axios from "axios";
 
 const fetchOrders = async (): Promise<Order[]> => {
   try {
     // add 2 second delay
     await new Promise((resolve) => setTimeout(resolve, 1200));
-    const response = await apiClient.get("/");
+    const response = await apiClient.get("/data");
     return response.data;
   } catch (error) {
     console.error("Error fetching orders in service:", error);
@@ -96,10 +97,25 @@ const fetchDesigns = async (): Promise<Design[]> => {
   }
 };
 
+const fetchShapes = async (): Promise<Shape[]> => {
+  try {
+    const response = await apiClient.get("/shapes");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching shapes:", error);
+    throw error;
+  }
+};
+
 export default {
   fetchOrders,
   fetchOrderById,
   createOrder,
   updateOrder,
   deleteOrder,
+  fetchCakes,
+  fetchCustomers,
+  fetchDesigns,
+  addCustomer,
+  fetchShapes,
 };

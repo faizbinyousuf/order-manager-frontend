@@ -161,6 +161,7 @@ function ItemConfiguration() {
             <CakeSlice />
             <h3>Cakes ({selectedCakes.length}) </h3>
             <Button
+              type="button"
               onClick={addNewCake}
               variant="outline"
               className="bg-red   ml-auto hover:border-rose-500 hover:text-rose-500"
@@ -176,6 +177,7 @@ function ItemConfiguration() {
               <CakeIcon color="#f43f5e" className="h-10 w-10 " />
               <p className="text-sm text-gray-500">No cakes added yet</p>
               <Button
+                type="button"
                 onClick={addNewCake}
                 variant="outline"
                 className="hover:border-rose-500 hover:text-rose-500"
@@ -200,6 +202,7 @@ function ItemConfiguration() {
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button
+                      type="button"
                       variant="outline"
                       // onClick={() => removeCake(cake.id)}
                       size="sm"

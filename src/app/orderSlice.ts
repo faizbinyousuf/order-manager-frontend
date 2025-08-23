@@ -19,6 +19,7 @@ import {
   createAsyncThunk,
 } from "@reduxjs/toolkit";
 import orderService from "@/api/orders";
+import axios from "axios";
 
 ///sample data
 
@@ -29,6 +30,7 @@ const initialState: OrderData = {
   selectedCakes: [],
   designs: [],
   shapes: [],
+  salesExecutives: [],
   advancePayment: 0,
   salesExecutive: "",
   deliveryDate: "",
@@ -41,6 +43,7 @@ const initialState: OrderData = {
   orderBackup: [],
   loading: false,
   error: null,
+  initialDataFetched: false,
 };
 
 export const orderSlice = createSlice({
@@ -65,6 +68,8 @@ export const orderSlice = createSlice({
     },
     addCustomer: (state, action: PayloadAction<Customer>) => {
       state.customers.push(action.payload);
+      state.selectedCustomer = action.payload;
+      console.log("selectedCustomer", state.selectedCustomer);
     },
     setCakes: (state, action: PayloadAction<Cake[]>) => {
       state.cakes = action.payload;
@@ -208,6 +213,27 @@ export const orderSlice = createSlice({
   extraReducers: (builder) => {
     // Handle fetchOrders
     builder
+
+      // initiali data fetch
+      .addCase(fetchInitialData.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchInitialData.fulfilled, (state, action) => {
+        state.loading = false;
+        state.customers = action.payload[0];
+        state.cakes = action.payload[1];
+        state.shapes = action.payload[2];
+        state.designs = action.payload[3];
+        state.initialDataFetched = true;
+
+        state.error = null;
+      })
+      .addCase(fetchInitialData.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      })
+      // fetch orders
       .addCase(fetchOrdersThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -260,6 +286,24 @@ export const orderSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
+    //add customer
+    // .addCase(createCustomerThunk.pending, (state) => {
+    //   // state.loading = true;
+    //   // state.error = null;
+    // })
+    // .addCase(createCustomerThunk.fulfilled, (state, action) => {
+    //   state.customers.push(action.payload);
+    //   state.selectedCustomer = action.payload;
+    //   state.initialDataFetched = true;
+    //   console.log("selectedCustomer in slice", state.selectedCustomer);
+
+    //   state.error = null;
+    // })
+    // .addCase(createCustomerThunk.rejected, (state, action) => {
+    //   state.loading = false;
+    //   state.error = action.payload as string;
+    // })
   },
 });
 
@@ -274,6 +318,27 @@ function convertDateFormat(dateString: string): string {
 }
 
 // Async thunks.........
+
+// initial data fetch
+export const fetchInitialData = createAsyncThunk(
+  "order/fetchInitialData",
+  async (_, { rejectWithValue }) => {
+    try {
+      const data = await Promise.all([
+        orderService.fetchCustomers(),
+        orderService.fetchCakes(),
+        orderService.fetchShapes(),
+        orderService.fetchDesigns(),
+      ]);
+
+      return data;
+    } catch (error: any) {
+      return rejectWithValue(
+        error.message || "Failed to call fetchInitialData"
+      );
+    }
+  }
+);
 
 export const fetchOrdersThunk = createAsyncThunk(
   "order/fetchOrders",
@@ -304,6 +369,41 @@ export const updateOrderStatusThunk = createAsyncThunk(
     }
   }
 );
+
+// create customer. thunk
+
+export const createCustomerNormal = async (customerToCreate: Customer) => {
+  try {
+    const res = await orderService.addCustomer(customerToCreate);
+    return res;
+  } catch (error: any) {
+    console.log(error);
+    return null;
+  }
+};
+
+export const createCustomerThunk = createAsyncThunk(
+  "order/createCustomer",
+  async (customerToCreate: Customer, { rejectWithValue }) => {
+    try {
+      const res = await orderService.addCustomer(customerToCreate);
+      return res;
+    } catch (error: any) {
+      console.log(error);
+      return rejectWithValue(error.message || "Failed to create customer");
+    }
+  }
+);
+
+const fakeStoreApi = async () => {
+  try {
+    const response = await axios.get("https://fakestoreapi.com/products");
+    return response.data;
+  } catch (error) {
+    console.error("Error adding customer:", error);
+    throw error;
+  }
+};
 
 // Async thunk for creating a new order
 export const createOrderThunk = createAsyncThunk(
@@ -545,9 +645,10 @@ export const {
   setCustomer,
   setCakes,
   setShapes,
-  addCustomer,
+
   addSelectedCake,
   updateCake,
+  // addCustomer,
   updateInscription,
   removeCakeSelection,
   resetOrder,
@@ -562,6 +663,7 @@ export const {
   setError,
   setLoading,
   setOrders,
+  addCustomer,
   filterOrdersByStatusAndPriority,
 } = orderSlice.actions;
 

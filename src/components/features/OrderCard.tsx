@@ -4,6 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import {
   Bike,
   Cake,
+  CakeIcon,
   CakeSlice,
   Camera,
   CheckCircle,
@@ -12,6 +13,7 @@ import {
   EyeIcon,
   ImageIcon,
   ListOrdered,
+  LocationEditIcon,
   Package,
   Palette,
   Play,
@@ -143,6 +145,20 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
     return designNames[designId] || `Design #${designId}`;
   };
 
+  const getShapeName = (shapeId: number): string => {
+    const designNames: Record<number, string> = {
+      1: "Floral Design",
+      2: "Birthday Special",
+      3: "Wedding Elegance",
+      4: "Kids Cartoon",
+      5: "Corporate Theme",
+      6: "Anniversary Gold",
+      7: "Baby Shower",
+      8: "Graduation Cap",
+    };
+    return designNames[shapeId] || `Shape #${shapeId}`;
+  };
+
   return (
     <>
       <Card
@@ -214,6 +230,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                   <form>
                     <DialogTrigger asChild>
                       <Button
+                        type="button"
                         variant="outline"
                         size="sm"
                         // onClick={() => setSelectedOrder(order)}
@@ -222,38 +239,117 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                         <EyeIcon className="size-3" />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="min-w-3xl sm:max-w-[425px]">
                       <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
-                        <DialogDescription>
-                          Make changes to your profile here. Click save when
-                          you&apos;re done.
-                        </DialogDescription>
+                        <DialogTitle>
+                          Order Details - {order.orderNumber}
+                        </DialogTitle>
                       </DialogHeader>
-                      <div className="grid gap-4">
-                        <div className="grid gap-3">
-                          <Label htmlFor="name-1">Name</Label>
-                          <Input
-                            id="name-1"
-                            name="name"
-                            defaultValue="Pedro Duarte"
-                          />
+                      <div className="grid gap-4"></div>
+                      <div className="bg-slate-100 p-3 rounded-sm space-y-5">
+                        <div className="flex gap-x-2 ">
+                          <User />
+                          <p className="font-semibold">Customer Information</p>
                         </div>
-                        <div className="grid gap-3">
-                          <Label htmlFor="username-1">Username</Label>
-                          <Input
-                            id="username-1"
-                            name="username"
-                            defaultValue="@peduarte"
-                          />
+                        <div className="flex justify-between">
+                          <div className="space-y-5">
+                            <div>
+                              <Label>Name:</Label>
+                              <p>{order.customer.name}</p>
+                            </div>
+                            <div>
+                              <Label>Email:</Label>
+                              <p>{order.customer.email}</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-5">
+                            <div>
+                              <Label>Phone:</Label>
+                              <p>{order.customer.phone}</p>
+                            </div>
+                            <div>
+                              <Label>Sales Executive:</Label>
+                              <p>{order.salesExecutive}</p>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                      <DialogFooter>
+
+                      {/* Delivery info */}
+                      <div className="bg-slate-100 p-3 rounded-sm space-y-5">
+                        <div className="flex gap-x-2 ">
+                          <LocationEditIcon />
+                          <p className="font-semibold">Delivery Information</p>
+                        </div>
+                        <div className="flex justify-between">
+                          <div className="space-y-5">
+                            <div>
+                              <Label>Mode:</Label>
+                              <p>
+                                {order.deliveryMode
+                                  .replace("_", " ")
+                                  .toUpperCase()}
+                              </p>
+                            </div>
+                            <div>
+                              <Label>Address:</Label>
+                              <p>{order.deliveryAddress}</p>
+                            </div>
+                          </div>
+
+                          <div className="space-y-5">
+                            <div>
+                              <Label>Date & Time:</Label>
+                              <p>
+                                {order.deliveryDate} at {order.deliveryTime}
+                              </p>
+                            </div>
+                            <div></div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <div className="flex space-x-2">
+                          <CakeIcon></CakeIcon>
+                          <h3 className="font-semibold">Cake Details</h3>
+                        </div>
+                        {order.cakes.map((cake, index) => {
+                          return (
+                            <div className="border rounded-sm border-gray-300 p-3 mt-1.5">
+                              <p>Cake#{index + 1}</p>
+                              <div className="flex justify-between text-sm">
+                                <div className="flex">
+                                  <div>
+                                    <p>Flavor:</p>
+                                    <p>{"Chocolate"}</p>
+                                  </div>
+                                </div>
+                                <div className="flex ">
+                                  <div>
+                                    <p>Shape:</p>
+                                    <p>{cake.cakeShapeId}</p>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div>
+                                    <p> Quantity:</p>
+                                    <p>{cake.quantity}</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* <DialogFooter>
                         <DialogClose asChild>
                           <Button variant="outline">Cancel</Button>
                         </DialogClose>
                         <Button type="submit">Save changes</Button>
-                      </DialogFooter>
+                      </DialogFooter> */}
                     </DialogContent>
                   </form>
                 </Dialog>
@@ -357,6 +453,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               {order.orderStatus === "pending" && (
                 <>
                   <Button
+                    type="button"
                     size="sm"
                     variant="outline"
                     onClick={() =>
@@ -368,6 +465,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                     Reject
                   </Button>
                   <Button
+                    type="button"
                     size="sm"
                     onClick={() =>
                       handleUpdateOrderStatus(order.id, OrderStatus.ACCEPTED)
@@ -381,6 +479,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               )}
               {order.orderStatus === "accepted" && (
                 <Button
+                  type="button"
                   size="sm"
                   onClick={() =>
                     handleUpdateOrderStatus(order.id, "in_progress")
@@ -393,6 +492,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
               )}
               {order.orderStatus === "in_progress" && (
                 <Button
+                  type="button"
                   size="sm"
                   onClick={() =>
                     handleUpdateOrderStatus(order.id, OrderStatus.COMPLETED)

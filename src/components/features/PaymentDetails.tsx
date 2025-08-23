@@ -21,13 +21,9 @@ import {
   setSalesExecutive,
 } from "@/app/orderSlice";
 function PaymentDetails() {
-  const salesExecutives = [
-    "Alice Cooper",
-    "Bob Wilson",
-    "Carol Brown",
-    "David Lee",
-    "Emma White",
-  ];
+  const salesExecutives = useAppSelector(
+    (state) => state.order.salesExecutives
+  );
   const remainingBalance = useAppSelector(selectRemainingBalance);
   const grandTotal = useAppSelector(selectGrandTotal);
   const advanceAmount = useAppSelector((state) => state.order.advancePayment);
