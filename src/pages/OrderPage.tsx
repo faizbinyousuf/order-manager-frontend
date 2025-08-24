@@ -180,7 +180,7 @@ function OrderPage() {
                   Refresh
                 </Button>
               </div>
-              <Bell className="size-6 text-slate-600 hover:text-slate-900 mr-4" />
+              {/* <Bell className="size-6 text-slate-600 hover:text-slate-900 mr-4" /> */}
             </div>
           </CardContent>
         </Card>
