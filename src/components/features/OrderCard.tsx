@@ -22,9 +22,6 @@ import {
   XCircle,
 } from "lucide-react";
 
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-
 import {
   Dialog,
   DialogClose,
@@ -35,10 +32,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+
 import { Badge } from "@/components/ui/badge";
 import { OrderStatus, type Order, type Priority } from "@/types/OrderTypes";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 interface OrderCardProps {
   order: Order;
@@ -158,7 +154,6 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
     };
     return designNames[shapeId] || `Shape #${shapeId}`;
   };
-
   return (
     <>
       <Card
@@ -239,37 +234,39 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                         <EyeIcon className="size-3" />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="min-w-3xl sm:max-w-[425px]">
+                    <DialogContent className="min-w-3xl sm:max-w-[425px] max-h-[80vh] overflow-y-auto  ">
                       <DialogHeader>
-                        <DialogTitle>
+                        <DialogTitle className="text-md ">
                           Order Details - {order.orderNumber}
                         </DialogTitle>
                       </DialogHeader>
-                      <div className="grid gap-4"></div>
-                      <div className="bg-slate-100 p-3 rounded-sm space-y-5">
+
+                      <div className="bg-slate-100 p-3 rounded-sm space-y-1">
                         <div className="flex gap-x-2 ">
-                          <User />
-                          <p className="font-semibold">Customer Information</p>
+                          <User className="size-4" />
+                          <p className="font-semibold text-sm">
+                            Customer Information
+                          </p>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex justify-between text-sm">
                           <div className="space-y-5">
                             <div>
-                              <Label>Name:</Label>
+                              <p className="font-semibold">Name:</p>
                               <p>{order.customer.name}</p>
                             </div>
                             <div>
-                              <Label>Email:</Label>
+                              <p className="font-semibold">Email:</p>
                               <p>{order.customer.email}</p>
                             </div>
                           </div>
 
                           <div className="space-y-5">
                             <div>
-                              <Label>Phone:</Label>
+                              <p className="font-semibold">Phone:</p>
                               <p>{order.customer.phone}</p>
                             </div>
                             <div>
-                              <Label>Sales Executive:</Label>
+                              <p className="font-semibold">Sales Executive:</p>
                               <p>{order.salesExecutive}</p>
                             </div>
                           </div>
@@ -277,15 +274,15 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                       </div>
 
                       {/* Delivery info */}
-                      <div className="bg-slate-100 p-3 rounded-sm space-y-5">
+                      <div className="bg-slate-100 p-3 rounded-sm space-y-1 text-sm">
                         <div className="flex gap-x-2 ">
-                          <LocationEditIcon />
+                          <LocationEditIcon className="size-4" />
                           <p className="font-semibold">Delivery Information</p>
                         </div>
                         <div className="flex justify-between">
                           <div className="space-y-5">
                             <div>
-                              <Label>Mode:</Label>
+                              <p className="font-semibold">Mode:</p>
                               <p>
                                 {order.deliveryMode
                                   .replace("_", " ")
@@ -293,14 +290,14 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                               </p>
                             </div>
                             <div>
-                              <Label>Address:</Label>
+                              <p className="font-semibold">Address:</p>
                               <p>{order.deliveryAddress}</p>
                             </div>
                           </div>
 
                           <div className="space-y-5">
                             <div>
-                              <Label>Date & Time:</Label>
+                              <p className="font-semibold">Date & Time:</p>
                               <p>
                                 {order.deliveryDate} at {order.deliveryTime}
                               </p>
@@ -311,37 +308,160 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                       </div>
 
                       <div>
-                        <div className="flex space-x-2">
-                          <CakeIcon></CakeIcon>
-                          <h3 className="font-semibold">Cake Details</h3>
+                        <div className="flex space-x-2 ">
+                          <CakeIcon className="size-4" />
+                          <h3 className="font-semibold text-sm">
+                            Cake Details
+                          </h3>
                         </div>
                         {order.cakes.map((cake, index) => {
+                          const isPhotoCake =
+                            cake.halfPhoto === true || cake.fullPhoto === true;
                           return (
-                            <div className="border rounded-sm border-gray-300 p-3 mt-1.5">
-                              <p>Cake#{index + 1}</p>
+                            <div
+                              key={index}
+                              className="border rounded-sm border-gray-300 p-3 mt-1.5 text-sm"
+                            >
+                              <p className="font-semibold">Cake #{index + 1}</p>
                               <div className="flex justify-between text-sm">
                                 <div className="flex">
                                   <div>
                                     <p>Flavor:</p>
-                                    <p>{"Chocolate"}</p>
+                                    <p className="font-semibold">
+                                      {"Chocolate"}
+                                    </p>
                                   </div>
                                 </div>
                                 <div className="flex ">
                                   <div>
                                     <p>Shape:</p>
-                                    <p>{cake.cakeShapeId}</p>
+                                    <p className="font-semibold">
+                                      {cake.cakeShapeId}
+                                    </p>
                                   </div>
                                 </div>
                                 <div>
                                   <div>
                                     <p> Quantity:</p>
-                                    <p>{cake.quantity}</p>
+                                    <p className="font-semibold">
+                                      {cake.quantity}
+                                    </p>
                                   </div>
                                 </div>
                               </div>
+                              <div className="mt-2">
+                                {cake.inscription && (
+                                  <div>
+                                    <p className="text-sm">Inscription:</p>
+                                    <p className="text-xs text-left text-slate-600 font-medium bg-[#f3f7fd] p-2 rounded-r-sm border-l-3 border-[#5095d5] mb-2">
+                                      "{cake.inscription}"
+                                    </p>
+                                  </div>
+                                )}
+
+                                {cake.notes && (
+                                  <div>
+                                    <p className="text-sm">Notes:</p>
+                                    <p className="text-xs text-left font-medium text-slate-600 bg-[#fbf5f4] p-2 rounded-r-sm border-l-3 border-[#d5857a] mb-2">
+                                      {cake.notes}
+                                    </p>
+                                  </div>
+                                )}
+                              </div>
+                              {cake.selectedDesignChargeIds.length != 0 && (
+                                <div>
+                                  <p className="text-sm mt-2 mb-1">Design:</p>
+                                  <div className="flex   items-center justify-between text-xs">
+                                    <div className="flex items-center gap-1">
+                                      {cake.selectedDesignChargeIds.length !=
+                                        0 && (
+                                        <div className="flex items-center gap-1">
+                                          <Palette className="size-3 shrink-0  text-rose-700" />
+                                          <span className=" text-slate-600  font-medium">
+                                            {cake.selectedDesignChargeIds
+                                              .map((id) => getDesignName(id))
+                                              .join(", ")}
+                                          </span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                              <p className="text-sm mt-2">Photo Print:</p>
+                              <p className="inline-block text-xs">
+                                {cake.fullPhoto
+                                  ? "Full Size :   "
+                                  : "Half Size :  "}
+                              </p>
+                              <Dialog>
+                                <DialogTrigger asChild>
+                                  <button className="text-slate-600 underline text-sm blue-red-700 cursor-pointer pl-2">
+                                    {cake.file}
+                                  </button>
+                                </DialogTrigger>
+                                <DialogContent className="sm:max-w-[60vw] max-h-[80vh] overflow-auto">
+                                  <div className="flex flex-col items-center p-4">
+                                    <h3 className="text-lg font-semibold mb-4">
+                                      {cake.file}
+                                    </h3>
+                                    <img
+                                      src={cake.file}
+                                      alt={cake.file || "Cake photo"}
+                                      className="max-w-full max-h-[70vh] object-contain"
+                                      onError={(e) => {
+                                        // Fallback if image fails to load
+                                        e.currentTarget.style.display = "none";
+                                        console.error(
+                                          "Image failed to load:",
+                                          cake.file
+                                        );
+                                      }}
+                                    />
+                                    {cake.file && (
+                                      <p className="text-sm text-muted-foreground mt-2">
+                                        {cake.file}
+                                      </p>
+                                    )}
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
                             </div>
                           );
                         })}
+
+                        <div
+                          className={`p-3 rounded-sm space-y-2 mt-2 ${
+                            order.paymentStatus == "paid"
+                              ? "bg-[#ceefce]"
+                              : "bg-slate-100"
+                          }`}
+                        >
+                          <p className="font-semibold text-sm">
+                            Payment Information
+                          </p>
+                          <div className="flex justify-between">
+                            <div>
+                              <p className="text-sm">Total:</p>
+                              <p className="font-semibold">
+                                {order.totalAmount}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm">Advance:</p>
+                              <p className="font-semibold">
+                                {" "}
+                                {order.advancePayment}{" "}
+                              </p>
+                            </div>
+                            <div>
+                              <p className="text-sm">Balance:</p>
+                              <p className="font-semibold">
+                                {order.remainingBalance}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
                       </div>
 
                       {/* <DialogFooter>
@@ -357,20 +477,6 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
             </div>
 
             <div className="flex items-center gap-2">
-              {/* <User className="size-4 text-xs text-slate-600" /> */}
-              {/* <Avatar>
-                <AvatarImage
-                  
-                  alt="@shadcn"
-                />
-                <AvatarFallback className={"bg-rose-100  text-sm font-medium"}>
-                  
-                  {order.customer.name.charAt(0).toUpperCase()}
-                  {order.customer.name.split(" ")[1]?.charAt(0).toUpperCase() ??
-                    ""}
-                </AvatarFallback>
-              </Avatar> */}
-
               <p className="text-xs font-bold   text-slate-600  max-w-28">
                 {order.customer.name}
               </p>
@@ -437,9 +543,7 @@ function OrderCard({ order, handleUpdateOrderStatus }: OrderCardProps) {
                       {isPhotoCake && (
                         <div className="flex items-center   gap-1">
                           <ImageIcon className="size-4 text-slate-500" />
-                          <span className="text-slate-600 font-medium">
-                            {cake.fullPhoto === true ? "Full" : "Half"}
-                          </span>
+                          <span className="text-slate-600 font-medium"></span>
                         </div>
                       )}
                     </div>

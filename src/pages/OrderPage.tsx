@@ -35,6 +35,7 @@ import {
   updateOrderStatusThunk,
 } from "@/app/orderSlice";
 import { useSelector } from "react-redux";
+import Overview from "@/components/features/Overview";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -266,7 +267,9 @@ function OrderPage() {
               </CardContent>
             </Card>
           </TabsContent>
-          <TabsContent value="overview">Overview content</TabsContent>
+          <TabsContent value="overview">
+            <Overview />
+          </TabsContent>
         </Tabs>
 
         {/* </div> */}
