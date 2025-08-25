@@ -19,6 +19,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Generate 12-hour time options with 30-minute intervals
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const generateTimeOptions = () => {
     const options = [];
 
@@ -41,7 +42,23 @@ const TimePicker: React.FC<TimePickerProps> = ({
     return options;
   };
 
-  const timeOptions = generateTimeOptions();
+  function generateTimeOptionsTwo() {
+    const options = [];
+    for (let hour = 0; hour < 24; hour++) {
+      if (hour < 9) continue;
+      for (const minute of [0, 30]) {
+        const period = hour >= 12 ? "PM" : "AM";
+        const displayHour = hour % 12 || 12;
+        const timeString = `${displayHour}:${minute
+          .toString()
+          .padStart(2, "0")}`;
+        options.push(`${timeString} ${period}`);
+      }
+    }
+    return options;
+  }
+
+  const timeOptions = generateTimeOptionsTwo();
 
   const handleTimeSelect = (time: string) => {
     setSelectedTime(time);

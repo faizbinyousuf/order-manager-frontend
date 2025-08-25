@@ -36,6 +36,7 @@ import {
 } from "@/app/orderSlice";
 import { useSelector } from "react-redux";
 import Overview from "@/components/features/Overview";
+import { motion, AnimatePresence } from "framer-motion";
 
 function OrderPage() {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -185,91 +186,110 @@ function OrderPage() {
           </CardContent>
         </Card>
         {/* <div className="max-w-7xl mx-auto px-6 py-6 bg-red-100"> */}
-        <Tabs defaultValue="orders">
-          <TabsList className="w-full ">
-            <TabsTrigger className="rounded-none" value="orders">
+        <Tabs defaultValue="orders" className="smooth-tabs">
+          <TabsList className="w-full  px-0 ">
+            <TabsTrigger className="rounded-md" value="orders">
               <ClipboardListIcon className="h-4 w-4" />
               Orders
             </TabsTrigger>
-            <TabsTrigger className="rounded-none" value="overview">
+            <TabsTrigger className="rounded-md" value="overview">
               <Activity className="h-4 w-4" />
               Overview
             </TabsTrigger>
           </TabsList>
+          <AnimatePresence mode="popLayout">
+            <TabsContent value="orders" asChild key={"orders"}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="tab-content"
+              >
+                <Card>
+                  <CardContent>
+                    <div className="flex items-center  flex-col md:flex-row justify-between gap-3">
+                      <div className="flex-1 min-w-64 w-full">
+                        <div className="relative">
+                          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
+                          <Input
+                            placeholder="Search orders, customers"
+                            value={searchQuery}
+                            style={{
+                              color: "gray",
+                            }}
+                            onChange={(e) => handleSearch(e.target.value)}
+                            className="pl-10 rounded-sm border-slate-300  focus:!ring-transparent placeholder:text-slate-400"
+                          />
+                        </div>
+                      </div>
 
-          <TabsContent value="orders">
-            <Card>
-              <CardContent>
-                <div className="flex items-center  flex-col md:flex-row justify-between gap-3">
-                  <div className="flex-1 min-w-64 w-full">
-                    <div className="relative">
-                      <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
-                      <Input
-                        placeholder="Search orders, customers"
-                        value={searchQuery}
-                        style={{
-                          color: "gray",
-                        }}
-                        onChange={(e) => handleSearch(e.target.value)}
-                        className="pl-10 rounded-sm border-slate-300  focus:!ring-transparent placeholder:text-slate-400"
-                      />
+                      <div className="flex  max-sm:w-full max-sm:justify-between gap-3">
+                        <Select
+                          value={statusFilter}
+                          onValueChange={handleStatusFilter}
+                        >
+                          <SelectTrigger className="w-36">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Status</SelectItem>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="accepted">Accepted</SelectItem>
+                            <SelectItem value="in_progress">
+                              In Progress
+                            </SelectItem>
+                            <SelectItem value="completed">Completed</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        <Select
+                          value={priorityFilter}
+                          onValueChange={handlePriorityFilter}
+                        >
+                          <SelectTrigger className="w-36">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Priority</SelectItem>
+                            <SelectItem value="urgent">Urgent</SelectItem>
+                            <SelectItem value="normal">Normal</SelectItem>
+                            <SelectItem value="low">Low</SelectItem>
+                            <SelectItem value="medium">Medium</SelectItem>
+                            <SelectItem value="high">High</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="flex  max-sm:w-full max-sm:justify-between gap-3">
-                    <Select
-                      value={statusFilter}
-                      onValueChange={handleStatusFilter}
-                    >
-                      <SelectTrigger className="w-36">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Status</SelectItem>
-                        <SelectItem value="pending">Pending</SelectItem>
-                        <SelectItem value="accepted">Accepted</SelectItem>
-                        <SelectItem value="in_progress">In Progress</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="rejected">Rejected</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    {/* Order Grids */}
 
-                    <Select
-                      value={priorityFilter}
-                      onValueChange={handlePriorityFilter}
-                    >
-                      <SelectTrigger className="w-36">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Priority</SelectItem>
-                        <SelectItem value="urgent">Urgent</SelectItem>
-                        <SelectItem value="normal">Normal</SelectItem>
-                        <SelectItem value="low">Low</SelectItem>
-                        <SelectItem value="medium">Medium</SelectItem>
-                        <SelectItem value="high">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                {/* Order Grids */}
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-5 ">
-                  {allOrders.map((order: Order) => (
-                    <OrderCard
-                      key={order.id}
-                      order={order}
-                      handleUpdateOrderStatus={handleStatusUpdate}
-                    />
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          <TabsContent value="overview">
-            <Overview />
-          </TabsContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3  gap-4 mt-5 ">
+                      {allOrders.map((order: Order) => (
+                        <OrderCard
+                          key={order.id}
+                          order={order}
+                          handleUpdateOrderStatus={handleStatusUpdate}
+                        />
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              </motion.div>
+            </TabsContent>
+            <TabsContent value="overview" asChild key={"overview"}>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                className="tab-content"
+              >
+                <Overview />
+              </motion.div>
+            </TabsContent>
+          </AnimatePresence>
         </Tabs>
 
         {/* </div> */}

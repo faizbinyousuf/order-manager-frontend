@@ -34,6 +34,9 @@ import TimePicker from "../custom/time-picker";
 import { toast } from "sonner";
 
 function DeliveryAddress() {
+  const currentYear = new Date().getFullYear();
+  const maxYear = currentYear + 5;
+  const maxDate = new Date(maxYear, 11, 31);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
   const [time, setTime] = React.useState("");
   const [openDate, setOpenDate] = React.useState(false);
@@ -204,6 +207,10 @@ function DeliveryAddress() {
                     <Calendar
                       mode="single"
                       selected={date}
+                      hidden={{
+                        before: new Date(),
+                        after: maxDate,
+                      }}
                       captionLayout="dropdown"
                       onSelect={(date) => {
                         handleDeliveryDateSelection(date!.toString());
