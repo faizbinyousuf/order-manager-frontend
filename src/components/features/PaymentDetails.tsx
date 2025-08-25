@@ -24,6 +24,7 @@ function PaymentDetails() {
   const salesExecutives = useAppSelector(
     (state) => state.order.salesExecutives
   );
+  console.log("RTRTR", salesExecutives);
   const remainingBalance = useAppSelector(selectRemainingBalance);
   const grandTotal = useAppSelector(selectGrandTotal);
   const advanceAmount = useAppSelector((state) => state.order.advancePayment);
@@ -104,8 +105,8 @@ function PaymentDetails() {
                 </SelectTrigger>
                 <SelectContent>
                   {salesExecutives.map((exec) => (
-                    <SelectItem key={exec} value={exec}>
-                      {exec}
+                    <SelectItem key={exec.id} value={exec.name}>
+                      {exec.name}
                     </SelectItem>
                   ))}
                 </SelectContent>

@@ -97,7 +97,7 @@ function Overview() {
   };
   //
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen ">
       <Card className="shadow-none bg-transparent border-none">
         <CardContent className=" p-0 m-0">
           <div className="flex flex-wrap justify-center gap-3  ">
@@ -141,7 +141,7 @@ function Overview() {
         </CardContent>
       </Card>
       <div className="flex justify-center   gap-10">
-        <Card className="flex-3   max-h-60">
+        <Card className="flex-3   max-h-64">
           <CardContent>
             <div>
               <h2 className="text-xl font-bold">Today's Production</h2>
@@ -214,7 +214,7 @@ function Overview() {
           <CardContent>
             <div className="w-full">
               <h2 className="text-xl font-bold">Urgent Orders</h2>
-              <div className="overflow-auto   max-h-80 mt-5 ">
+              <div className="overflow-auto   max-h-80  ">
                 {orders
                   .filter((order) => order.priority === "urgent")
                   .map((order) => (

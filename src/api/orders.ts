@@ -1,5 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import type { Cake, Customer, Design, Order, Shape } from "@/types/OrderTypes";
+import type {
+  Cake,
+  Customer,
+  Design,
+  Order,
+  SalesExecutive,
+  Shape,
+} from "@/types/OrderTypes";
 import apiClient from "./client";
 import axios from "axios";
 
@@ -107,6 +114,16 @@ const fetchShapes = async (): Promise<Shape[]> => {
   }
 };
 
+const fetchSalesExecutives = async (): Promise<SalesExecutive[]> => {
+  try {
+    const response = await apiClient.get("/salesExecutives");
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching salesExecutives:", error);
+    throw error;
+  }
+};
+
 export default {
   fetchOrders,
   fetchOrderById,
@@ -118,4 +135,5 @@ export default {
   fetchDesigns,
   addCustomer,
   fetchShapes,
+  fetchSalesExecutives,
 };

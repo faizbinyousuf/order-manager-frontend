@@ -120,13 +120,14 @@ function ItemConfiguration() {
   const removeCake = (id: number) => {
     dispatch(removeCakeSelection(id));
   };
-  const handleFlavorSelection = (index: number, id: string) => {
+  const handleFlavorSelection = (index: number, id: number) => {
     console.log(" id", id);
 
     updateCakeProperty(index, {
-      cakeId: parseInt(id),
-      price: cakes.find((c) => c.id === parseInt(id))?.price || 0,
-      name: cakes.find((c) => c.id === parseInt(id))?.name || "",
+      cakeId: id,
+      price: cakes.find((c) => c.id === id)?.price || 0,
+
+      name: cakes.find((c) => c.id === id)?.name || "",
       quantity: 1,
     });
   };
@@ -239,14 +240,14 @@ function ItemConfiguration() {
               <div className="grid md:grid-cols-3 gap-6  ">
                 <div>
                   <Label htmlFor="flavor" className="mb-2   text-gray-700   ">
-                    Item Flavor
+                    Cake Flavor
                   </Label>
                   <Select
                     key={cake.id}
                     // value={cake.cakeId?.toString() || ""}
                     value={cake.cakeId ? cake.cakeId.toString() : undefined}
                     onValueChange={(value) =>
-                      handleFlavorSelection(index, value)
+                      handleFlavorSelection(index, parseInt(value))
                     }
                   >
                     <SelectTrigger className="w-full ">
@@ -273,7 +274,7 @@ function ItemConfiguration() {
 
                 <div>
                   <Label htmlFor="shape" className="mb-2   text-gray-700    ">
-                    Item Shape
+                    Cake Shape
                   </Label>
                   <Select
                     value={

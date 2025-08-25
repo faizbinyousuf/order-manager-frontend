@@ -1,15 +1,15 @@
 {
   "salesExecutives": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Malik"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Abu"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Arfas"
     }
   ],
@@ -323,89 +323,96 @@
   ],
   "cakes": [
     {
-      "id": "1",
-      "name": "Vanilla"
+      "id": 1,
+      "name": "Vanilla",
+      "price": 500
     },
     {
-      "id": "2",
-      "name": "Chocolate Truffle"
+      "id": 2,
+      "name": "Chocolate Truffle",
+      "price": 600
     },
     {
-      "id": "3",
-      "name": "Butterscotch"
+      "id": 3,
+      "name": "Butterscotch",
+      "price": 700
     },
     {
-      "id": "4",
-      "name": "Lemon"
+      "id": 4,
+      "name": "Lemon",
+      "price": 800
     },
     {
-      "id": "5",
-      "name": "Cheesecake"
+      "id": 5,
+      "name": "Cheesecake",
+      "price": 900
     },
     {
-      "id": "6",
-      "name": "Raspberry"
+      "id": 6,
+      "name": "Raspberry",
+      "price": 900
     },
     {
-      "id": "7",
-      "name": "Mango Vanilla"
+      "id": 7,
+      "name": "Mango Vanilla",
+      "price": 1000
     }
   ],
   "shapes": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Circle"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Rectangle"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Square"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Heart"
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Custom"
     }
   ],
   "designs": [
     {
-      "id": "1",
+      "id": 1,
       "name": "Floral",
       "price": 100,
       "image": "https://picsum.photos/200/300"
     },
     {
-      "id": "2",
+      "id": 2,
       "name": "Printed",
       "price": 200,
       "image": "https://picsum.photos/200/300"
     },
     {
-      "id": "3",
+      "id": 3,
       "name": "Mickey Mouse",
       "price": 300,
       "image": "https://picsum.photos/200/300"
     },
     {
-      "id": "4",
+      "id": 4,
       "name": "Tom and Jerry",
       "price": 400,
       "image": "https://picsum.photos/200/300"
     },
     {
-      "id": "5",
+      "id": 5,
       "name": "Wedding Special",
       "price": 500,
       "image": "https://picsum.photos/200/300"
     },
     {
-      "id": "6",
+      "id": 6,
       "name": "Cartoon",
       "price": 600,
       "image": "https://picsum.photos/200/300"
@@ -413,7 +420,7 @@
   ],
   "data": [
     {
-      "id": "1",
+      "id": 1,
       "orderNumber": "116852",
       "customer": {
         "id": "cust-001",
@@ -432,10 +439,7 @@
           "fullPhoto": true,
           "cakeId": 1,
           "cakeShapeId": 2,
-          "selectedDesignChargeIds": [
-            1,
-            3
-          ],
+          "selectedDesignChargeIds": [1, 3],
           "additionalDesign": "Birthday Theme",
           "customDesignCharge": 300,
           "inscription": "Happy Birthday Riya!",
@@ -452,7 +456,7 @@
       "remainingBalance": 1000,
       "paymentStatus": "partial",
       "paymentMode": "UPI",
-      "orderStatus": "completed",
+      "orderStatus": "pending",
       "priority": "high",
       "salesExecutive": "Priya Patel",
       "createdAt": "2023-12-20T10:30:00Z",
@@ -460,7 +464,7 @@
       "notes": "Edited notes again"
     },
     {
-      "id": "2",
+      "id": 2,
       "orderNumber": "116853",
       "customer": {
         "id": "cust-002",
@@ -478,9 +482,7 @@
           "fullPhoto": false,
           "cakeId": 2,
           "cakeShapeId": 1,
-          "selectedDesignChargeIds": [
-            2
-          ],
+          "selectedDesignChargeIds": [2],
           "additionalDesign": "Anniversary",
           "customDesignCharge": 200,
           "inscription": "Happy Anniversary",
@@ -504,7 +506,7 @@
       "updatedAt": "2023-12-20T09:45:00Z"
     },
     {
-      "id": "3",
+      "id": 3,
       "orderNumber": "116854",
       "customer": {
         "id": "cust-003",
@@ -522,9 +524,7 @@
           "fullPhoto": false,
           "cakeId": 3,
           "cakeShapeId": 3,
-          "selectedDesignChargeIds": [
-            5
-          ],
+          "selectedDesignChargeIds": [5],
           "additionalDesign": "Graduation",
           "customDesignCharge": 500,
           "inscription": "Congratulations Dr. Reddy!",
@@ -565,7 +565,7 @@
       "updatedAt": "2023-12-21T16:20:00Z"
     },
     {
-      "id": "4",
+      "id": 4,
       "orderNumber": "116855",
       "customer": {
         "id": "cust-004",
@@ -584,9 +584,7 @@
           "fullPhoto": true,
           "cakeId": 5,
           "cakeShapeId": 2,
-          "selectedDesignChargeIds": [
-            4
-          ],
+          "selectedDesignChargeIds": [4],
           "additionalDesign": "",
           "customDesignCharge": 0,
           "inscription": "Happy Retirement!",
@@ -611,7 +609,7 @@
       "notes": "Customer requested delivery date change but wasn't available"
     },
     {
-      "id": "5",
+      "id": 5,
       "orderNumber": "116856",
       "customer": {
         "id": "cust-005",
@@ -670,7 +668,7 @@
       "updatedAt": "2023-12-22T17:30:00Z"
     },
     {
-      "id": "6",
+      "id": 6,
       "orderNumber": "116857",
       "customer": {
         "id": "cust-005",
@@ -729,7 +727,7 @@
       "updatedAt": "2023-12-22T17:30:00Z"
     },
     {
-      "id": "7",
+      "id": 7,
       "orderNumber": "116858",
       "customer": {
         "id": "cust-005",
@@ -771,7 +769,7 @@
       "updatedAt": "2023-12-22T17:30:00Z"
     },
     {
-      "id": "8",
+      "id": 8,
       "orderNumber": "116859",
       "customer": {
         "id": "cust-005",
@@ -830,7 +828,7 @@
       "updatedAt": "2023-12-22T17:30:00Z"
     },
     {
-      "id": "696b",
+      "id": 9,
       "customer": {
         "id": "2",
         "name": "Sarah Johnson",
@@ -874,7 +872,7 @@
       "createdAt": "2025-08-20T04:05:18.670Z"
     },
     {
-      "id": "fb1d",
+      "id": 10,
       "customer": {
         "id": "1",
         "name": "John Smith",
@@ -918,7 +916,7 @@
       "createdAt": "2025-08-20T04:08:40.471Z"
     },
     {
-      "id": "48c3",
+      "id": 11,
       "customer": {
         "id": "3",
         "name": "Mike Davis",
@@ -962,7 +960,7 @@
       "createdAt": "2025-08-20T04:10:56.671Z"
     },
     {
-      "id": "f3c8",
+      "id": 12,
       "customer": {
         "id": "1",
         "name": "John Smith",
@@ -1006,7 +1004,7 @@
       "createdAt": "2025-08-20T04:11:50.955Z"
     },
     {
-      "id": "750e",
+      "id": 13,
       "customer": {
         "id": "1",
         "name": "John Smith",
@@ -1050,7 +1048,7 @@
       "createdAt": "2025-08-20T04:13:03.756Z"
     },
     {
-      "id": "5500",
+      "id": 14,
       "customer": {
         "id": "2",
         "name": "Sarah Johnson",

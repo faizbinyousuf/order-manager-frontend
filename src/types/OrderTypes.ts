@@ -64,7 +64,7 @@ export interface OrderData {
   remainingBalance: number;
 
   salesExecutive: string;
-  salesExecutives: string[];
+  salesExecutives: SalesExecutive[];
   deliveryDate: string;
   deliveryTime: string;
   deliveryAddress: string;
@@ -83,6 +83,10 @@ export interface Design {
   name: string;
   price: number;
   image: string;
+}
+export interface SalesExecutive {
+  id: number;
+  name: string;
 }
 export interface Cake {
   id: number;

@@ -144,7 +144,7 @@ function OrderPage() {
         </div>
       )}
       <div className="max-w-7xl mx-auto  ">
-        <Card className="rounded-none shadow-none ">
+        <Card className="rounded-none shadow-none sticky top-0 py-2   ">
           <CardContent className="flex items-center">
             <Link to="/">
               <Button
@@ -175,7 +175,7 @@ function OrderPage() {
                   type="button"
                   className="rounded-sm "
                   variant="outline"
-                  onClick={() => console.log("Refresh")}
+                  onClick={() => dispatch(fetchOrdersThunk())}
                 >
                   <RefreshCcw className="size-4 text-slate-600 hover:text-slate-900 mr-2" />
                   Refresh
@@ -206,7 +206,7 @@ function OrderPage() {
                 transition={{ duration: 0.2 }}
                 className="tab-content"
               >
-                <Card>
+                <Card className="bg-transparent">
                   <CardContent>
                     <div className="flex items-center  flex-col md:flex-row justify-between gap-3">
                       <div className="flex-1 min-w-64 w-full">

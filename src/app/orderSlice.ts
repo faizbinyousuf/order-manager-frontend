@@ -225,6 +225,7 @@ export const orderSlice = createSlice({
         state.cakes = action.payload[1];
         state.shapes = action.payload[2];
         state.designs = action.payload[3];
+        state.salesExecutives = action.payload[4];
         state.initialDataFetched = true;
 
         state.error = null;
@@ -329,6 +330,7 @@ export const fetchInitialData = createAsyncThunk(
         orderService.fetchCakes(),
         orderService.fetchShapes(),
         orderService.fetchDesigns(),
+        orderService.fetchSalesExecutives(),
       ]);
 
       return data;
